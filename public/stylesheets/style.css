@@ -1,0 +1,16 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+.login {
+  margin: auto;
+}
+
+.sign-in {
+  max-width: 550px;
+}
+
+a {
+  color: #00B7FF;
+}
