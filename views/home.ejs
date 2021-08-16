@@ -1,4 +1,212 @@
 <%- include('partials/header'); %>
+<div class="px-3 py-3">
+  <h2>Projects</h2>
+  <hr>
+  <h4>Filters</h4>
+  <div id="filterform" class="container">
+    <form id="browse">
+      <div>
+        <div class="form-check">
+          <div class="d-flex flex-row mb-3">
+            <div class="container w-25">
+              <input type="checkbox" class="form-check-input" name="checkid">
+              <label class="form-check-label" for="ID">ID</label>
+            </div>
+            <div class="container">
+              <input class="form-control" type="number" name="id" step="1" placeholder="ID">
+            </div>
+          </div>
+        </div>
+        <div class="form-check">
+          <div class="d-flex flex-row mb-3">
+            <div class="container w-25">
+              <input type="checkbox" class="form-check-input" name="checkname">
+              <label class="form-check-label" for="Name">Name</label>
+            </div>
+            <div class="container">
+              <input class="form-control" type="text" name="name" placeholder="Name">
+            </div>
+          </div>
+        </div>
+        <div class="form-check">
+          <div class="d-flex flex-row mb-3">
+            <div class="container w-25">
+              <input type="checkbox" class="form-check-input" name="checkmember">
+              <label class="form-check-label" for="Member">Member</label>
+            </div>
+            <div class="container">
+              <select class="form-control" id="inputMember" name="Member">
+                <option disabled selected> Choose the boolean ...</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Search</button>
+      </div>
+    </form>
+  </div>
+  <h4>Options</h4>
+
+  <div id="filterform">
+    <form id="browse">
+      <div class="d-flex">
+        <h6>Columns</h6>
+        <div>
+          <div class="form-check">
+            <div class="mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkid">
+                <label class="form-check-label" for="ID">ID</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkname">
+                <label class="form-check-label" for="Name">Name</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkmembers">
+                <label class="form-check-label" for="Members">Members</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary" type="submit">Apply</button>
+    </form>
+  </div>
+  <div class="container mt-3">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>
+            <div>ID</div>
+            <div>
+              <button id="idASC" class="arrow arrow-up"></button>
+              <button id="idDESC" class="arrow arrow-down"></button>
+            </div>
+          </th>
+          <th>
+            <div>String</div>
+            <div>
+              <button id="stringASC" class="arrow arrow-up"></button>
+              <button id="stringDESC" class="arrow arrow-down"></button>
+            </div>
+          </th>
+          <th>
+            <div>Integer</div>
+            <div>
+              <button id="integerASC" class="arrow arrow-up"></button>
+              <button id="integerDESC" class="arrow arrow-down"></button>
+            </div>
+          </th>
+          <th>
+            <div>Float</div>
+            <div>
+              <button id="floatASC" class="arrow arrow-up"></button>
+              <button id="floatDESC" class="arrow arrow-down"></button>
+            </div>
+          </th>
+          <th>
+            <div>Date</div>
+            <div>
+              <button id="dateASC" class="arrow arrow-up"></button>
+              <button id="dateDESC" class="arrow arrow-down"></button>
+            </div>
+          </th>
+          <th>
+            <div>Boolean</div>
+          </th>
+          <th>
+            <div>Actions</div>
+          </th>
+          </th>
+        </tr>
+      </thead>
+      <tbody id="tdata">
+      </tbody>
+    </table>
+    <nav>
+      <p id="pagenumber"></p>
+      <p id="filters"></p>
+      <p id="sortp"></p>
+      <p id="sortr"></p>
+      <ul id="page" class="pagination mt-2">
+      </ul>
+    </nav>
+    <button id="addbutton" class="btn btn-primary" type="button">Add</button>
+  </div>
+  <div style="display: none;" id="fillformcontainer" class="container mt-3">
+    <h3 id="formtitle"></h3>
+    <form id="fillform">
+      <div>
+        <div id="idfill" style="display: none;">
+          <div class="d-flex flex-row mb-3">
+            <div class="container w-25">
+              <label class="form-check-label" for="ID">ID</label>
+            </div>
+            <div class="container">
+              <input id="idform" disabled class="form-control" type="number" name="id" step="1" placeholder="ID">
+            </div>
+          </div>
+        </div>
+        <div class="d-flex flex-row mb-3">
+          <div class="container w-25">
+            <label class="form-check-label" for="String">String</label>
+          </div>
+          <div class="container">
+            <input id="stringform" class="form-control" type="text" name="string" placeholder="String">
+          </div>
+        </div>
+        <div class="d-flex flex-row mb-3">
+          <div class="container w-25">
+            <label class="form-check-label" for="Integer">Integer</label>
+          </div>
+          <div class="container">
+            <input id="integerform" class="form-control" type="number" name="integer" placeholder="Integer">
+          </div>
+        </div>
+        <div class="d-flex flex-row mb-3">
+          <div class="container w-25">
+            <label class="form-check-label" for="Float">Float</label>
+          </div>
+          <div class="container">
+            <input id="floatform" class="form-control" type="number" name="float" step="any" placeholder="Float">
+          </div>
+        </div>
+        <div class="d-flex flex-row mb-3">
+          <div class="container w-25">
+            <label class="form-check-label" for="Date">Date</label>
+          </div>
+          <div class="container">
+            <div>
+              <input id="dateform" class="form-control" type="date" name="date">
+            </div>
+          </div>
+        </div>
+        <div class="d-flex flex-row mb-3">
+          <div class="container w-25">
+            <label class="form-check-label" for="Boolean">Boolean</label>
+          </div>
+          <div class="container">
+            <select id="booleanform" class="form-control" id="inputBoolean" name="boolean">
+              <option disabled selected value=""> Choose the boolean ...</option>
+              <option value="true">true</option>
+              <option value="false">false</option>
+            </select>
+          </div>
+        </div>
+        <button id="submitfillform" class="btn btn-primary" type="submit"></button>
+      </div>
+    </form>
+  </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
