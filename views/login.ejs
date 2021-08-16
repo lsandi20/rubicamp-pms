@@ -19,13 +19,13 @@
   <div class="login">
     <h1>Project Management System</h1>
     <div class="sign-in">
-      <form>
+      <form action="/auth" method="POST">
         <div class="form-floating">
-          <input id="email" class="form-control" type="email" placeholder="nama@e-mail.com">
+          <input id="email" class="form-control" type="email" name="email" placeholder="nama@e-mail.com">
           <label for="email">Email address</label>
         </div>
         <div class="form-floating">
-          <input id="password" class="form-control" type="password" placeholder="password">
+          <input id="password" class="form-control" type="password" name="password" placeholder="password">
           <label for="password">Password</label>
         </div>
         <div class="form-check mt-3 mb-3">

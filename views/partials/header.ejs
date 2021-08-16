@@ -10,7 +10,7 @@
 
 <body>
   <nav class="navbar navbar-dark navbar-expand-lg bg-dark">
-    <div class="container-fluid">
+    <div class="container-md">
       <a class="navbar-brand" href="/home">Project Management System</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar"
         aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,8 +22,12 @@
             href="/home">Projects</a>
           <a class="nav-link <%= nav === 'profile' ? 'active' : ''%>"
             <%= nav === 'profile' ? 'aria-current=page' : '' %> href="profile">Profile</a>
+
         </div>
       </div>
     </div>
-
+    <span class="navbar-text mx-3">
+      <%= user.firstname %>
+    </span>
+    <a href="/logout" class=" mx-3 btn btn-outline-success">Sign Out</a>
   </nav>
