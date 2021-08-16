@@ -8,8 +8,16 @@ var indexRouter = require('./routes/index');
 var homeRouter = require('./routes/home');
 var profileRouter = require('./routes/profile');
 
-var app = express();
+require('dotenv').config();
 
+var app = express();
+var session = require('express-session');
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  saveUninitialized: false,
+  resave: false
+}))
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
