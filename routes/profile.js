@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 const helpers = require('../helpers/util');
 let db = require('../db');
+const bcrypt = require('bcrypt');
+const saltRound = 10;
 
 /* GET users listing. */
 router.get('/', helpers.isLoggedIn, function (req, rs, next) {
@@ -22,7 +24,7 @@ router.post('/', function (req, res, next) {
   ], (err) => {
     if (data.password.length !== 0) {
       db.query(`UPDATE users SET password = $1 WHERE userid = $2`, [
-        data.password,
+        bcrypt.hashSync(data.password, saltRound),
         data.userid
       ], (err) => {
         res.redirect('/profile')

@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 let db = require('../db');
+const bcrypt = require('bcrypt');
+const saltRound = 10;
 /* GET home page. */
 router.get('/', function (req, res, next) {
   if (req.session.user) {
@@ -16,7 +18,7 @@ router.post('/auth', function (req, rs, next) {
       rs.redirect('/');
     }
     let data = res.rows[0];
-    if (data.password === password) {
+    if (bcrypt.compareSync(password, data.password)) {
       req.session.user = data;
       rs.redirect('/home')
     } else {
