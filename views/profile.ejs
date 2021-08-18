@@ -30,18 +30,20 @@
           </div>
           <div class="container">
             <div class="form-check">
-              <input class="form-check-input" type="radio" <%= profile.role === 'manager' ? 'checked' : '' %>
+              <input class="form-check-input" type="radio" <%= profile.position === 'manager' ? 'checked' : '' %>
                 name="position" id="manager" value="manager">
               <label class="form-check-label" for="manager">Manager</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" <%= profile.role === 'software developer' ? 'checked' : '' %>
-                name="position" id="softwaredev" value="software developer">
+              <input class="form-check-input" type="radio"
+                <%= profile.position === 'software developer' ? 'checked' : '' %> name="position" id="softwaredev"
+                value="software developer">
               <label class="form-check-label" for="softwaredev">Software Developer</label>
             </div>
             <div class="form-check">
-              <input class="form-check-input" type="radio" <%= profile.role === 'quality assurance' ? 'checked' : '' %>
-                name="position" id="qa" value="quality assurance">
+              <input class="form-check-input" type="radio"
+                <%= profile.position === 'quality assurance' ? 'checked' : '' %> name="position" id="qa"
+                value="quality assurance">
               <label class="form-check-label" for="qa">Quality Assurance</label>
             </div>
           </div>
