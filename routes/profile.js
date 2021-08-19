@@ -7,17 +7,16 @@ const saltRound = 10;
 
 /* GET users listing. */
 router.get('/', helpers.isLoggedIn, function (req, rs, next) {
-  db.query(`SELECT email, password, role , fulltime FROM users 
-  INNER JOIN members ON users.userid = members.userid WHERE users.userid = $1`,
+  db.query(`SELECT email, password, position , fulltime FROM users WHERE users.userid = $1`,
     [req.session.user.userid], (err, res) => {
-      rs.render('profile', { nav: 'profile', user: req.session.user, profile: res.rows[0] });
+      rs.render('profile/form', { nav: 'profile', user: req.session.user, profile: res.rows[0] });
       rs.status(200);
     })
 });
 
 router.post('/', function (req, res, next) {
   let data = req.body;
-  db.query(`UPDATE members SET role = $1, fulltime = $2 WHERE userid = $3`, [
+  db.query(`UPDATE users SET position = $1, fulltime = $2 WHERE userid = $3`, [
     data.position,
     data.fulltime ? true : false,
     data.userid

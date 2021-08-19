@@ -6,7 +6,7 @@ const saltRound = 10;
 /* GET home page. */
 router.get('/', function (req, res, next) {
   if (req.session.user) {
-    return res.redirect('/home')
+    return res.redirect('/projects')
   }
   res.render('login');
 });
@@ -20,7 +20,7 @@ router.post('/auth', function (req, rs, next) {
     let data = res.rows[0];
     if (bcrypt.compareSync(password, data.password)) {
       req.session.user = data;
-      rs.redirect('/home')
+      rs.redirect('/projects')
     } else {
       rs.redirect('/');
     }

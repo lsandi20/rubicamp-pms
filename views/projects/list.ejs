@@ -1,19 +1,21 @@
-<%- include('partials/header'); %>
+<%- include('../partials/header'); %>
+
+<%- include('../partials/topbar'); %>
 <div class="px-3 py-3">
   <h2>Projects</h2>
   <hr>
   <h4>Filters</h4>
   <div id="filterform" class="container">
-    <form id="browse">
+    <form action="/projects" method="GET" id="browse">
       <div>
         <div class="form-check">
           <div class="d-flex flex-row mb-3">
             <div class="container w-25">
-              <input type="checkbox" class="form-check-input" name="checkid">
+              <input type="checkbox" class="form-check-input" name="checkprojectid">
               <label class="form-check-label" for="ID">ID</label>
             </div>
             <div class="container">
-              <input class="form-control" type="number" name="id" step="1" placeholder="ID">
+              <input class="form-control" type="number" name="projectid" step="1" placeholder="ID">
             </div>
           </div>
         </div>
@@ -35,8 +37,11 @@
               <label class="form-check-label" for="Member">Member</label>
             </div>
             <div class="container">
-              <select class="form-control" id="inputMember" name="Member">
-                <option disabled selected> Choose the boolean ...</option>
+              <select class="form-control" id="inputMember" name="member">
+                <option disabled selected> Choose the member ...</option>
+                <% members.forEach( (el) => { %>
+                <option value="<%= el.firstname %>"><%= el.firstname %></option>
+                <%  }) %>
               </select>
             </div>
           </div>
@@ -47,15 +52,16 @@
   </div>
   <h4>Options</h4>
 
-  <div id="filterform">
-    <form id="browse">
+  <div>
+    <form action="/projects/option" method="POST">
       <div class="d-flex">
         <h6>Columns</h6>
         <div>
           <div class="form-check">
             <div class="mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkid">
+                <input type="checkbox" class="form-check-input" <%= option.projectid ? 'checked' : '' %>
+                  name="optionprojectid">
                 <label class="form-check-label" for="ID">ID</label>
               </div>
             </div>
@@ -63,7 +69,7 @@
           <div class="form-check">
             <div class="mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkname">
+                <input type="checkbox" class="form-check-input" <%= option.name ? 'checked' : '' %> name="optionname">
                 <label class="form-check-label" for="Name">Name</label>
               </div>
             </div>
@@ -71,7 +77,8 @@
           <div class="form-check">
             <div class="mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkmembers">
+                <input type="checkbox" class="form-check-input" <%= option.members ? 'checked' : '' %>
+                  name="optionmembers">
                 <label class="form-check-label" for="Members">Members</label>
               </div>
             </div>
@@ -85,51 +92,56 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>
-            <div>ID</div>
+          <th <%= option.projectid ? '' : 'hidden' %>>
+            <div>#</div>
             <div>
-              <button id="idASC" class="arrow arrow-up"></button>
-              <button id="idDESC" class="arrow arrow-down"></button>
+              <a href="<%= `/projects/?${query}&sortp=projectid&sortr=ASC` %>"
+                class="arrow arrow-up <%= (sort.prop === 'projectid' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+              <a href="<%= `/projects/?${query}&sortp=projectid&sortr=DESC` %>"
+                class="arrow arrow-down <%= (sort.prop === 'projectid' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
             </div>
           </th>
-          <th>
-            <div>String</div>
+          <th <%= option.name ? '' : 'hidden' %>>
+            <div>Name</div>
             <div>
-              <button id="stringASC" class="arrow arrow-up"></button>
-              <button id="stringDESC" class="arrow arrow-down"></button>
+              <a href="<%= `/projects/?${query}&sortp=name&sortr=ASC` %>"
+                class="arrow arrow-up <%= (sort.prop === 'name' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+              <a href="<%= `/projects/?${query}&sortp=name&sortr=DESC` %>"
+                class="arrow arrow-down <%= (sort.prop === 'name' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
             </div>
           </th>
-          <th>
-            <div>Integer</div>
+          <th <%= option.members ? '' : 'hidden' %>>
+            <div>Members</div>
             <div>
-              <button id="integerASC" class="arrow arrow-up"></button>
-              <button id="integerDESC" class="arrow arrow-down"></button>
+              <a href="<%= `/projects/?${query}&sortp=members&sortr=ASC` %>"
+                class="arrow arrow-up <%= (sort.prop === 'members' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+              <a href="<%= `/projects/?${query}&sortp=members&sortr=DESC` %>"
+                class="arrow arrow-down <%= (sort.prop === 'members' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
             </div>
           </th>
-          <th>
-            <div>Float</div>
-            <div>
-              <button id="floatASC" class="arrow arrow-up"></button>
-              <button id="floatDESC" class="arrow arrow-down"></button>
-            </div>
-          </th>
-          <th>
-            <div>Date</div>
-            <div>
-              <button id="dateASC" class="arrow arrow-up"></button>
-              <button id="dateDESC" class="arrow arrow-down"></button>
-            </div>
-          </th>
-          <th>
-            <div>Boolean</div>
-          </th>
-          <th>
+          <th <%= option.projectid || option.name || option.members ? '' : 'hidden' %>>
             <div>Actions</div>
           </th>
           </th>
         </tr>
       </thead>
       <tbody id="tdata">
+        <% let p = isNaN(parseInt(result.page)) || parseInt(result.page) === 0 ? 1 : parseInt(result.page); %>
+        <% let list = result.data %>
+        <% list.forEach((el, index) =>{ 
+              %>
+        <tr>
+          <td <%= option.projectid ? '' : 'hidden' %>><%= el.projectid || '' %></td>
+          <td <%= option.name ? '' : 'hidden' %>><%= el.name || '' %></td>
+          <td <%= option.members ? '' : 'hidden' %>><%= el.members || '' %></td>
+          <td <%= option.projectid || option.name || option.members ? '' : 'hidden' %>>
+            <div>
+              <a href="/projects/edit/<%= el.projectid %>" class="btn btn-success">Edit</a>
+              <a href="/projects/delete/<%= el.projectid %>" class="btn btn-danger">Delete</a>
+            </div>
+          </td>
+        </tr>
+        <% }) %>
       </tbody>
     </table>
     <nav>
@@ -138,6 +150,22 @@
       <p id="sortp"></p>
       <p id="sortr"></p>
       <ul id="page" class="pagination mt-2">
+        <% let size = Math.ceil(result.total / 3) %>
+        <% if (p > 1) { %>
+        <li class="page-item"><a class="page-link"
+            href="<%= `/projects?page=${p > 1 ? p-1 : 1}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>">Previous</a>
+        </li>
+        <% }%>
+        <% for (let i = 0; i < size; i++) { %>
+        <li class="page-item"><a class="page-link"
+            href="<%= `/projects?page=${i+1}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>"><%=i+1%></a>
+        </li>
+        <%}%>
+        <% if (p < size) { %>
+        <li class="page-item"><a class="page-link"
+            href="<%= `/projects?page=${p < size ? p+1 : size}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>">Next</a>
+        </li>
+        <% }%>
       </ul>
     </nav>
     <button id="addbutton" class="btn btn-primary" type="button">Add</button>
@@ -208,7 +236,4 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-
-</body>
+<%- include('../partials/footer'); %>
