@@ -131,7 +131,8 @@
         <% list.forEach((el, index) =>{ 
               %>
         <tr>
-          <td <%= option.projectid ? '' : 'hidden' %>><%= el.projectid || '' %></td>
+          <td <%= option.projectid ? '' : 'hidden' %>><a
+              href="/projects/overview/<%= el.projectid || '' %>"><%= el.projectid || '' %></a></td>
           <td <%= option.name ? '' : 'hidden' %>><%= el.name || '' %></td>
           <td <%= option.members ? '' : 'hidden' %>><%= el.members || '' %></td>
           <td <%= option.projectid || option.name || option.members ? '' : 'hidden' %>>

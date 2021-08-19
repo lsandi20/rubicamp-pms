@@ -1,0 +1,56 @@
+<%- include('../../partials/header'); %>
+<%- include('../../partials/topbar'); %>
+<div class="d-flex vh-100">
+  <%- include('../../partials/sidebar'); %>
+  <div class="px-3 py-3">
+    <h2>Projects</h2>
+    <hr>
+    <h4>Filters</h4>
+    <div id="filterform" class="container">
+      <form action="/projects" method="GET" id="browse">
+        <div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-50">
+                <input type="checkbox" class="form-check-input" name="checkprojectid">
+                <label class="form-check-label" for="ID">ID</label>
+              </div>
+              <div class="container">
+                <input class="form-control" type="number" name="projectid" step="1" placeholder="ID">
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-50">
+                <input type="checkbox" class="form-check-input" name="checkname">
+                <label class="form-check-label" for="Name">Name</label>
+              </div>
+              <div class="container">
+                <input class="form-control" type="text" name="name" placeholder="Name">
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-50">
+                <input type="checkbox" class="form-check-input" name="checkmember">
+                <label class="form-check-label" for="Member">Member</label>
+              </div>
+              <div class="container">
+                <select class="form-control" id="inputMember" name="member">
+                  <option disabled selected> Choose the member ...</option>
+
+                </select>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+    </div>
+    <h4>Options</h4>
+
+  </div>
+</div>
+<%- include('../../partials/footer'); %>

@@ -1,0 +1,8 @@
+<nav class="nav flex-column nav-pills bg-light" style="width: 250px">
+  <a class="nav-link <%= side === 'overview' ? 'active' : ''%> rounded-0"
+    <%= side === 'overview' ? 'aria-current=page' : '' %> href="/projects/overview/<%= projectid%>">Overview</a>
+  <a class="nav-link <%= side === 'activity' ? 'active' : ''%> rounded-0"
+    <%= side === 'activity' ? 'aria-current=page' : '' %> href="/projects/activity/<%= projectid%>">Activity</a>
+  <a class="nav-link <%= side === 'members' ? 'active' : ''%> rounded-0"
+    <%= side === 'members' ? 'aria-current=page' : '' %> href="/projects/members/<%= projectid%>">Members</a>
+</nav>

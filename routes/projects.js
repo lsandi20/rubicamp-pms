@@ -64,10 +64,10 @@ router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
   }
   db.query(`SELECT userid, firstname FROM users`, (err, res) => {
     let members = res.rows;
-    db.query(`SELECT option from users WHERE userid = ${rq.session.user.userid}`, (err, res) => {
+    db.query(`SELECT projectoption from users WHERE userid = ${rq.session.user.userid}`, (err, res) => {
       let option = { projectid: false, name: false, members: false }
-      if (res.rows[0].option.length > 0) {
-        res.rows[0].option.forEach(el => {
+      if (res.rows[0].projectoption.length > 0) {
+        res.rows[0].projectoption.forEach(el => {
           option[el] = true
         });
       }
@@ -215,7 +215,7 @@ router.post('/option', (rq, rs) => {
   if (data.optionprojectid) option.push('projectid');
   if (data.optionname) option.push('name')
   if (data.optionmembers) option.push('members')
-  db.query(`UPDATE users set option = $1
+  db.query(`UPDATE users set projectoption = $1
   WHERE userid = $2`,
     [
       option,
@@ -224,5 +224,24 @@ router.post('/option', (rq, rs) => {
       rs.redirect('/projects')
     })
 })
+
+router.get('/overview/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
+  db.query(`SELECT p.name, array_agg(u.firstname || ' ' || u.lastname) AS members FROM projects p LEFT JOIN members m USING(projectid) LEFT JOIN users u USING(userid) WHERE p.projectid = $1 GROUP BY p.name`,
+    [rq.params.projectid],
+    (err, res) => {
+      let project = res.rows[0];
+      db.query(`SElECT 
+    COUNT(*) FILTER (WHERE tracker = 'bug' AND status != 'Closed') AS bugopen ,COUNT(*) FILTER (WHERE tracker = 'bug') AS bugtotal,
+    COUNT(*) FILTER (WHERE tracker = 'feature' AND status != 'Closed') AS featureopen ,COUNT(*) FILTER (WHERE tracker = 'feature') AS featuretotal,
+    COUNT(*) FILTER (WHERE tracker = 'support' AND status != 'Closed') AS supportopen ,COUNT(*) FILTER (WHERE tracker = 'support') AS supporttotal
+    FROM issues WHERE projectid = $1
+    `,
+        [rq.params.projectid],
+        (err, res) => {
+          let issuecount = res.rows[0];
+          rs.render('projects/overview/view', { nav: 'projects', side: 'overview', projectid: rq.params.projectid, user: rq.session.user, project, issuecount });
+        })
+    })
+});
 
 module.exports = router;
