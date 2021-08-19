@@ -82,7 +82,7 @@ router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
             page: parseInt(rq.query.page),
             total: res.rows[0] ? parseInt(res.rows[0].total) : 0
           }
-          rs.render('projects/list', { nav: 'home', query: url, sort, user: rq.session.user, result, members, option });
+          rs.render('projects/list', { nav: 'projects', query: url, sort, user: rq.session.user, result, members, option });
           rs.status(200);
         })
       })
@@ -91,53 +91,120 @@ router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
 
 });
 
-router.post('/', (rq, rs) => {
-  let data = rq.body;
-  db.query(`INSERT INTO bread(string, integer, float, date, boolean) values 
-          ($1, $2, $3, $4, $5) RETURNING *;`,
-    [
-      data.string || null,
-      data.integer || null,
-      data.float || null,
-      data.date || null,
-      data.boolean || null
-    ], (err, res) => {
-      rs.json(res.rows);
-      rs.status(201);
-    }
-  );
-})
-
-router.get('/:id', (rq, rs) => {
-  db.query('SELECT * FROM bread WHERE id = $1', [rq.params.id], (err, res) => {
-    rs.json(res.rows[0]);
-    rs.status(200);
+router.get('/add', helpers.isLoggedIn, (rq, rs) => {
+  db.query('SELECT userid, firstname, lastname FROM users', (err, res) => {
+    rs.render('projects/form', { nav: 'projects', user: rq.session.user, members: res.rows, form: 'add' });
   })
 })
 
-router.put('/edit/:id', (rq, rs) => {
+router.post('/', (rq, rs) => {
   let data = rq.body;
-  db.query(`UPDATE bread set string = $1, integer = $2, float = $3, date = $4, boolean = $5
-  WHERE id = $6 RETURNING *`,
+  let members = [];
+  if (Array.isArray(data.userid)) {
+    members = data.userid
+  } else {
+    if (data.userid) {
+      members = data.userid.split();
+    }
+  }
+  db.query(`INSERT INTO projects(name) values 
+          ($1) RETURNING *;`,
     [
-      data.string || null,
-      data.integer || null,
-      data.float || null,
-      data.date || null,
-      data.boolean || null,
-      rq.params.id
+      data.name
     ], (err, res) => {
-      rs.json(res.rows);
-      rs.status(200);
+      let projectid = res.rows[0].projectid;
+      let valuesvar = '';
+      let valuesvalue = []
+      members.forEach((el, index) => {
+        if (index + 1 === members.length) {
+          if (index === 0) {
+            valuesvar += `($${index + 1}, $${index + 2})`
+          } else {
+            valuesvar += `($${index + (index + 1)}, $${index + (index + 2)})`
+          }
+        } else {
+          if (index === 0) {
+            valuesvar += `($${index + 1}, $${index + 2}), `
+          } else {
+            valuesvar += `($${index + (index + 1)}, $${index + (index + 2)}), `
+          }
+        }
+        valuesvalue.push(`${el}`)
+        valuesvalue.push(`${projectid}`)
+      });
+      db.query(`INSERT INTO members(userid, projectid) VALUES ${valuesvar} RETURNING *`,
+        valuesvalue,
+        (err, res) => {
+          rs.redirect('/projects')
+          rs.status(201);
+        })
+    });
+})
+
+router.get('/edit/:projectid', helpers.isLoggedIn, (rq, rs) => {
+  db.query(`SELECT projectid, name, members FROM (SELECT p.projectid, p.name, array_agg(u.userid) members FROM projects p LEFT JOIN members m ON p.projectid = m.projectid LEFT JOIN users u ON u.userid = m.userid GROUP BY p.projectid) AS projectmember WHERE projectid = $1`, [rq.params.projectid], (err, res) => {
+    let project = res.rows[0];
+    db.query(`SELECT userid, firstname, lastname FROM users`, (err, res) => {
+      let members = res.rows;
+      rs.render('projects/form', { nav: 'projects', user: rq.session.user, members, form: 'edit', project });
+    });
+  })
+})
+
+router.post('/edit/:projectid', (rq, rs) => {
+  let data = rq.body;
+  db.query(`UPDATE projects SET name = $1 WHERE projectid = $2 RETURNING *`,
+    [
+      data.name,
+      rq.params.projectid
+    ], (err, res) => {
+      db.query(`DELETE FROM members WHERE projectid = $1`, [rq.params.projectid], (err, res) => {
+        let members = [];
+        if (Array.isArray(data.userid)) {
+          members = data.userid
+        } else {
+          if (data.userid) {
+            members = data.userid.split();
+          }
+        }
+        let projectid = rq.params.projectid;
+        let valuesvar = '';
+        let valuesvalue = []
+        members.forEach((el, index) => {
+          if (index + 1 === members.length) {
+            if (index === 0) {
+              valuesvar += `($${index + 1}, $${index + 2})`
+            } else {
+              valuesvar += `($${index + (index + 1)}, $${index + (index + 2)})`
+            }
+          } else {
+            if (index === 0) {
+              valuesvar += `($${index + 1}, $${index + 2}), `
+            } else {
+              valuesvar += `($${index + (index + 1)}, $${index + (index + 2)}), `
+            }
+          }
+          valuesvalue.push(`${el}`)
+          valuesvalue.push(`${projectid}`)
+        });
+        db.query(`INSERT INTO members(userid, projectid) VALUES ${valuesvar} RETURNING *`,
+          valuesvalue,
+          (err, res) => {
+            rs.redirect('/projects')
+            rs.status(201);
+          })
+
+      })
     })
 })
 
-router.delete('/delete/:id', (rq, rs) => {
-  db.query(`DELETE FROM bread WHERE id = $1`,
+router.get('/delete/:projectid', (rq, rs) => {
+  db.query(`DELETE FROM projects WHERE projectid = $1`,
     [
-      rq.params.id
+      rq.params.projectid
     ], (err, res) => {
-      rs.status(200).end();
+      rs.status(200);
+      rs.redirect('/projects')
     })
 })
 
