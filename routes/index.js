@@ -15,7 +15,7 @@ router.post('/auth', function (req, rs, next) {
   const { email, password } = req.body
   db.query(`SELECT * FROM users WHERE email = $1`, [email], (err, res) => {
     if (err || res.rows.length === 0) {
-      rs.redirect('/');
+      return rs.redirect('/');
     }
     let data = res.rows[0];
     if (bcrypt.compareSync(password, data.password)) {
