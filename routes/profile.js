@@ -16,22 +16,18 @@ router.get('/', helpers.isLoggedIn, function (req, rs, next) {
 
 router.post('/', function (req, res, next) {
   let data = req.body;
-  db.query(`UPDATE users SET position = $1, fulltime = $2 WHERE userid = $3`, [
-    data.position,
-    data.fulltime ? true : false,
-    data.userid
-  ], (err) => {
-    if (data.password.length !== 0) {
-      db.query(`UPDATE users SET password = $1 WHERE userid = $2`, [
-        bcrypt.hashSync(data.password, saltRound),
-        data.userid
-      ], (err) => {
-        res.redirect('/profile')
-      })
-    } else {
+  if (data.password.length !== 0) {
+    db.query(`UPDATE users SET password = $1, position = $2, fulltime = $3 WHERE userid = $4`, [
+      bcrypt.hashSync(data.password, saltRound),
+      data.position,
+      data.fulltime ? true : false,
+      data.userid
+    ], (err) => {
       res.redirect('/profile')
-    }
-  })
+    })
+  } else {
+    res.redirect('/profile')
+  }
 })
 
 module.exports = router;
