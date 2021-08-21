@@ -2,8 +2,8 @@
 <%- include('../../partials/topbar'); %>
 <div class="d-flex vh-100">
   <%- include('../../partials/sidebar'); %>
-  <div class="px-3 py-3">
-    <h2>Projects</h2>
+  <div class="px-3 py-3 vw-100">
+    <h2>Members</h2>
     <hr>
     <h4>Filters</h4>
     <div id="filterform" class="container">
@@ -34,12 +34,12 @@
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-50">
-                <input type="checkbox" class="form-check-input" name="checkmember">
-                <label class="form-check-label" for="Member">Member</label>
+                <input type="checkbox" class="form-check-input" name="checkposition">
+                <label class="form-check-label" for="position">Position</label>
               </div>
               <div class="container">
-                <select class="form-control" id="inputMember" name="member">
-                  <option disabled selected> Choose the member ...</option>
+                <select class="form-control" id="inputposition" name="position">
+                  <option disabled selected> Choose the Position ...</option>
 
                 </select>
               </div>

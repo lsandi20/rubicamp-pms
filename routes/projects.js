@@ -34,7 +34,7 @@ router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
   }
   let query = {
     projectid: rq.query.checkprojectid ? parseInt(rq.query.projectid) : null,
-    name: rq.query.checkname ? `%${rq.query.name}%` : null,
+    name: rq.query.checkname ? `%${rq.query.name.toLowerCase()}%` : null,
     member: rq.query.checkmember ? `%${rq.query.member}%` : null,
   }
   for (q in query) {
@@ -50,7 +50,7 @@ router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
       if (q === 'projectid') {
         filterQuery += `projectid = $${i},`
       } else if (q === 'name') {
-        filterQuery += `name LIKE $${i},`
+        filterQuery += `LOWER(name) LIKE $${i},`
       } else if (q === 'member') {
         filterQuery += `members LIKE $${i},`
       }
@@ -243,5 +243,9 @@ router.get('/overview/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
         })
     })
 });
+
+router.get('/members/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
+  rs.render('projects/members/list', { nav: 'projects', side: 'members', projectid: rq.params.projectid, user: rq.session.user });
+})
 
 module.exports = router;
