@@ -7,7 +7,7 @@
     <hr>
     <h4>Filters</h4>
     <div id="filterform" class="container">
-      <form action="/projects" method="GET" id="browse">
+      <form action="/projects/members/<%=projectid%>" method="GET" id="browse">
         <div>
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
@@ -27,7 +27,7 @@
                 <label class="form-check-label" for="Name">Name</label>
               </div>
               <div class="container">
-                <input class="form-control" type="text" name="name" placeholder="Name">
+                <input class="form-control" type="text" name="firstname" placeholder="Name">
               </div>
             </div>
           </div>
@@ -40,7 +40,9 @@
               <div class="container">
                 <select class="form-control" id="inputposition" name="position">
                   <option disabled selected> Choose the Position ...</option>
-
+                  <option value="manager"> Manager</option>
+                  <option value="quality assurance"> Quality Assurance</option>
+                  <option value="software developer"> Software Developer</option>
                 </select>
               </div>
             </div>
@@ -85,6 +87,90 @@
         </div>
         <button class="btn btn-primary" type="submit">Apply</button>
       </form>
+    </div>
+    <div class="container mt-3">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th <%= option.userid ? '' : 'hidden' %>>
+              <div>#</div>
+              <div>
+                <a href="<%= `/projects/members/${projectid}/?${query}&sortp=userid&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'userid' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/members/${projectid}/?${query}&sortp=userid&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'userid' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.name ? '' : 'hidden' %>>
+              <div>Name</div>
+              <div>
+                <a href="<%= `/projects/members/${projectid}/?${query}&sortp=name&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'name' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/members/${projectid}/?${query}&sortp=name&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'name' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.position ? '' : 'hidden' %>>
+              <div>Position</div>
+              <div>
+                <a href="<%= `/projects/members/${projectid}/?${query}&sortp=role&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'role' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/members/${projectid}/?${query}&sortp=role&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'role' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.userid || option.name || option.position ? '' : 'hidden' %>>
+              <div>Actions</div>
+            </th>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tdata">
+          <% let p = isNaN(parseInt(result.page)) || parseInt(result.page) === 0 ? 1 : parseInt(result.page); %>
+          <% let list = result.data %>
+          <% list.forEach((el, index) =>{ 
+                %>
+          <tr>
+            <td <%= option.userid ? '' : 'hidden' %>><%= el.userid || '' %></td>
+            <td <%= option.name ? '' : 'hidden' %>><%= el.firstname || '' %></td>
+            <td <%= option.position ? '' : 'hidden' %>>
+              <%= el.role === 'quality assurance' ? 'Quality Assurance' : el.role === 'software developer' ? 'Software Developer' : el.role === 'manager' ? 'Manager' : '' %>
+            </td>
+            <td <%= option.userid || option.name || option.position ? '' : 'hidden' %>>
+              <div>
+                <a href="/projects/members/<%=projectid%>/edit/<%= el.userid %>" class="btn btn-success">Edit</a>
+                <a href="/projects/members/<%=projectid%>/delete/<%= el.userid %>" class="btn btn-danger">Delete</a>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <nav>
+        <p id="pagenumber"></p>
+        <p id="filters"></p>
+        <p id="sortp"></p>
+        <p id="sortr"></p>
+        <ul id="page" class="pagination mt-2">
+          <% let size = Math.ceil(result.total / 3) %>
+          <% if (p > 1) { %>
+          <li class="page-item"><a class="page-link"
+              href="<%= `/projects/members/${projectid}/?page=${p > 1 ? p-1 : 1}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>">Previous</a>
+          </li>
+          <% }%>
+          <% for (let i = 0; i < size; i++) { %>
+          <li class="page-item"><a class="page-link"
+              href="<%= `/projects/members/${projectid}/?page=${i+1}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>"><%=i+1%></a>
+          </li>
+          <%}%>
+          <% if (p < size) { %>
+          <li class="page-item"><a class="page-link"
+              href="<%= `/projects/members/${projectid}/?page=${p < size ? p+1 : size}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>">Next</a>
+          </li>
+          <% }%>
+        </ul>
+      </nav>
+      <a class="btn btn-primary" href="/projects/members/${projectid}/add">Add</a>
     </div>
   </div>
 </div>
