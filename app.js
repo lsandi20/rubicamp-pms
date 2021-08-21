@@ -5,7 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
-var projectsRouter = require('./routes/projects');
+var projectsRouter = require('./routes/projects/projects');
 var profileRouter = require('./routes/profile');
 
 require('dotenv').config();

@@ -12,11 +12,11 @@
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-50">
-                <input type="checkbox" class="form-check-input" name="checkprojectid">
+                <input type="checkbox" class="form-check-input" name="checkuserid">
                 <label class="form-check-label" for="ID">ID</label>
               </div>
               <div class="container">
-                <input class="form-control" type="number" name="projectid" step="1" placeholder="ID">
+                <input class="form-control" type="number" name="userid" step="1" placeholder="ID">
               </div>
             </div>
           </div>
@@ -50,7 +50,42 @@
       </form>
     </div>
     <h4>Options</h4>
-
+    <div>
+      <form action="/projects/members/option/<%= projectid %>" method="POST">
+        <div class="d-flex">
+          <h6>Columns</h6>
+          <div>
+            <div class="form-check">
+              <div class="mb-3">
+                <div class="container w-25">
+                  <input type="checkbox" class="form-check-input" <%= option.userid ? 'checked' : '' %>
+                    name="optionuserid">
+                  <label class="form-check-label" for="ID">ID</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-check">
+              <div class="mb-3">
+                <div class="container w-25">
+                  <input type="checkbox" class="form-check-input" <%= option.name ? 'checked' : '' %> name="optionname">
+                  <label class="form-check-label" for="Name">Name</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-check">
+              <div class="mb-3">
+                <div class="container w-25">
+                  <input type="checkbox" class="form-check-input" <%= option.position ? 'checked' : '' %>
+                    name="optionposition">
+                  <label class="form-check-label" for="Position">Position</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Apply</button>
+      </form>
+    </div>
   </div>
 </div>
 <%- include('../../partials/footer'); %>

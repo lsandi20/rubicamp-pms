@@ -1,8 +1,8 @@
 var express = require('express');
-const helpers = require('../helpers/util');
+const helpers = require('../../helpers/util');
 var router = express.Router();
-const db = require('../db')
-
+const db = require('../../db')
+var membersRouter = require('./members/members');
 /* GET users listing. */
 
 router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
@@ -244,8 +244,6 @@ router.get('/overview/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
     })
 });
 
-router.get('/members/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
-  rs.render('projects/members/list', { nav: 'projects', side: 'members', projectid: rq.params.projectid, user: rq.session.user });
-})
+router.use('/members', membersRouter);
 
 module.exports = router;
