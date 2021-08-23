@@ -1,0 +1,43 @@
+<%- include('../../partials/header'); %>
+
+<%- include('../../partials/topbar'); %>
+
+<div id="fillformcontainer" class="container mt-3">
+  <form action="<%= form === 'edit' ? `/projects/members/edit/${members.id}` : '/projects/members'  %>" method="POST"
+    id="fillform">
+    <div>
+      <input id="idform" class="form-control" type="number" name="projectid" step="1" placeholder="ID" hidden
+        <%= form === 'edit' ? `value=${members.id}` : 'disabled'%>>
+      <div class="d-flex flex-row mb-3">
+        <div class="container w-25">
+          <label class="form-check-label" for="members">Member</label>
+        </div>
+        <div class="container">
+          <select class="form-control" id="inputMember" name="userid">
+            <option disabled selected> Choose the member ...</option>
+            <% members.forEach( (el) => { %>
+            <option value="<%= el.userid %>"><%= el.firstname %></option>
+            <%  }) %>
+          </select>
+        </div>
+      </div>
+      <div class="d-flex flex-row mb-3">
+        <div class="container w-25">
+          <label class="form-check-label" for="members">Position</label>
+        </div>
+        <div class="container">
+          <select class="form-control" id="inputPosition" name="role">
+            <option disabled selected> Choose role ...</option>
+            <option value="manager">Manager</option>
+            <option value="software developer">Software Developer</option>
+            <option value="quality assurance">Quality Assurance</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button id="submitfillform" class="btn btn-primary" type="submit">Save</button>
+</div>
+</form>
+</div>
+
+<%- include('../../partials/footer'); %>

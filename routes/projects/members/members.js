@@ -104,5 +104,11 @@ router.post('/option/:projectid', (rq, rs) => {
     })
 })
 
+router.get('/:projectid/add', helpers.isLoggedIn, (rq, rs) => {
+  db.query('SELECT * FROM users WHERE userid NOT IN (SELECT userid FROM members WHERE projectid = $1);', [rq.params.projectid], (err, res) => {
+    rs.render('projects/members/form', { nav: 'projects', side: 'members', user: rq.session.user, projectid: rq.params.projectid, members: res.rows, form: 'add' });
+  })
+})
+
 
 module.exports = router;
