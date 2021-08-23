@@ -3,8 +3,8 @@
 <%- include('../../partials/topbar'); %>
 
 <div id="fillformcontainer" class="container mt-3">
-  <form action="<%= form === 'edit' ? `/projects/members/edit/${members.id}` : '/projects/members'  %>" method="POST"
-    id="fillform">
+  <form action="<%= form === 'edit' ? `/projects/members/edit/${members.id}` : `/projects/members/${projectid}` %>"
+    method="POST" id="fillform">
     <div>
       <input id="idform" class="form-control" type="number" name="projectid" step="1" placeholder="ID" hidden
         <%= form === 'edit' ? `value=${members.id}` : 'disabled'%>>

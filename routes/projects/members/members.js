@@ -111,4 +111,20 @@ router.get('/:projectid/add', helpers.isLoggedIn, (rq, rs) => {
 })
 
 
+router.post('/:projectid', (rq, rs) => {
+  db.query(`INSERT INTO members(projectid, userid, role) values 
+      ($1, $2, $3) RETURNING *;`,
+    [
+      rq.params.projectid,
+      rq.body.userid,
+      rq.body.role
+    ],
+    (err, res) => {
+      rs.redirect(`/projects/members/${rq.params.projectid}`)
+      rs.status(201);
+    })
+})
+
+
+
 module.exports = router;
