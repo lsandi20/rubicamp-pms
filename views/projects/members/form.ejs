@@ -3,7 +3,8 @@
 <%- include('../../partials/topbar'); %>
 
 <div id="fillformcontainer" class="container mt-3">
-  <form action="<%= form === 'edit' ? `/projects/members/edit/${members.id}` : `/projects/members/${projectid}` %>"
+  <form
+    action="<%= form === 'edit' ? `/projects/members/edit/${projectid}/${members[0].userid}` : `/projects/members/${projectid}` %>"
     method="POST" id="fillform">
     <div>
       <input id="idform" class="form-control" type="number" name="projectid" step="1" placeholder="ID" hidden
@@ -16,7 +17,8 @@
           <select class="form-control" id="inputMember" name="userid">
             <option disabled selected> Choose the member ...</option>
             <% members.forEach( (el) => { %>
-            <option value="<%= el.userid %>"><%= el.firstname %></option>
+            <option <%= form === 'edit' ? 'selected disabled' : '' %> value="<%= el.userid %>"><%= el.firstname %>
+            </option>
             <%  }) %>
           </select>
         </div>
@@ -28,9 +30,14 @@
         <div class="container">
           <select class="form-control" id="inputPosition" name="role">
             <option disabled selected> Choose role ...</option>
-            <option value="manager">Manager</option>
-            <option value="software developer">Software Developer</option>
-            <option value="quality assurance">Quality Assurance</option>
+            <option value="manager" <%= form === 'edit' && members[0].role === 'manager' ? 'selected' : '' %>>Manager
+            </option>
+            <option value="software developer"
+              <%= form === 'edit' && members[0].role === 'software developer' ? 'selected' : '' %>>Software Developer
+            </option>
+            <option value="quality assurance"
+              <%= form === 'edit' && members[0].role === 'quality assurance' ? 'selected' : '' %>>Quality Assurance
+            </option>
           </select>
         </div>
       </div>

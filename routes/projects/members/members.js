@@ -125,6 +125,35 @@ router.post('/:projectid', (rq, rs) => {
     })
 })
 
+router.get('/delete/:projectid/:userid', (rq, rs) => {
+  db.query(`DELETE FROM members WHERE userid = $1 AND projectid = $2`,
+    [
+      rq.params.userid,
+      rq.params.projectid
+    ], (err, res) => {
+      rs.status(200);
+      rs.redirect(`/projects/members/${rq.params.projectid}`)
+    })
+})
+
+router.get('/edit/:projectid/:userid', helpers.isLoggedIn, (rq, rs) => {
+  db.query(`SELECT m.userid, u.firstname, m.role FROM members m INNER JOIN users u USING(userid) WHERE m.projectid = $1 AND m.userid = $2`, [rq.params.projectid, rq.params.userid], (err, res) => {
+    rs.render('projects/members/form', { nav: 'projects', side: 'members', user: rq.session.user, projectid: rq.params.projectid, members: res.rows, form: 'edit' });
+  })
+})
+
+router.post('/edit/:projectid/:userid', (rq, rs) => {
+  let data = rq.body;
+  db.query(`UPDATE members SET role = $1 WHERE projectid = $2 AND userid = $3 RETURNING *`,
+    [
+      data.role,
+      rq.params.projectid,
+      rq.params.userid
+    ], (err, res) => {
+      rs.status(201);
+      rs.redirect(`/projects/members/${rq.params.projectid}`)
+    })
+})
 
 
 module.exports = router;

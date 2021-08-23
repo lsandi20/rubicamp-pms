@@ -138,8 +138,8 @@
             </td>
             <td <%= option.userid || option.name || option.position ? '' : 'hidden' %>>
               <div>
-                <a href="/projects/members/<%=projectid%>/edit/<%= el.userid %>" class="btn btn-success">Edit</a>
-                <a href="/projects/members/<%=projectid%>/delete/<%= el.userid %>" class="btn btn-danger">Delete</a>
+                <a href="/projects/members/edit/<%=projectid%>/<%= el.userid %>" class="btn btn-success">Edit</a>
+                <a href="/projects/members/delete/<%=projectid%>/<%= el.userid %>" class="btn btn-danger">Delete</a>
               </div>
             </td>
           </tr>
