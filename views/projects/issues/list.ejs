@@ -24,10 +24,10 @@
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
                 <input type="checkbox" class="form-check-input" name="checksubject">
-                <label class="form-check-label" for="Name">Subject</label>
+                <label class="form-check-label" for="Subject">Subject</label>
               </div>
               <div class="container">
-                <input class="form-control" type="text" name="subject" placeholder="Name">
+                <input class="form-control" type="text" name="subject" placeholder="Subject">
               </div>
             </div>
           </div>
@@ -111,10 +111,10 @@
         <div class="d-flex container">
           <h6>Columns</h6>
           <div class="row align-items-start">
-            <div class="col">
+            <div class="col-1 me-4">
               <div class="form-check">
                 <div class="mb-3">
-                  <div class="container w-25">
+                  <div class="container">
                     <input type="checkbox" class="form-check-input" <%= option.issueid ? 'checked' : '' %>
                       name="optionissueid">
                     <label class="form-check-label" for="ID">ID</label>
@@ -123,16 +123,16 @@
               </div>
               <div class="form-check">
                 <div class="mb-3">
-                  <div class="container w-25">
+                  <div class="container">
                     <input type="checkbox" class="form-check-input" <%= option.subject ? 'checked' : '' %>
                       name="optionsubject">
-                    <label class="form-check-label" for="Name">Subject</label>
+                    <label class="form-check-label" for="Subject">Subject</label>
                   </div>
                 </div>
               </div>
               <div class="form-check">
                 <div class="mb-3">
-                  <div class="container w-25">
+                  <div class="container">
                     <input type="checkbox" class="form-check-input" <%= option.tracker ? 'checked' : '' %>
                       name="optiontracker">
                     <label class="form-check-label" for="Tracker">Tracker</label>
@@ -140,10 +140,10 @@
                 </div>
               </div>
             </div>
-            <div class="col">
+            <div class="col-1 me-4">
               <div class="form-check">
                 <div class="mb-3">
-                  <div class="container w-25">
+                  <div class="container">
                     <input type="checkbox" class="form-check-input" <%= option.status ? 'checked' : '' %>
                       name="optionstatus">
                     <label class="form-check-label" for="status">Status</label>
@@ -152,7 +152,7 @@
               </div>
               <div class="form-check">
                 <div class="mb-3">
-                  <div class="container w-25">
+                  <div class="container">
                     <input type="checkbox" class="form-check-input" <%= option.priority ? 'checked' : '' %>
                       name="optionpriority">
                     <label class="form-check-label" for="Priority">Priority</label>
@@ -161,10 +161,126 @@
               </div>
               <div class="form-check">
                 <div class="mb-3">
-                  <div class="container w-25">
+                  <div class="container">
                     <input type="checkbox" class="form-check-input" <%= option.assignee ? 'checked' : '' %>
                       name="optionassignee">
                     <label class="form-check-label" for="Assignee">Assignee</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-2">
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.description ? 'checked' : '' %>
+                      name="optiondescription">
+                    <label class="form-check-label" for="description">Description</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.startdate ? 'checked' : '' %>
+                      name="optionstartdate">
+                    <label class="form-check-label" for="Start Date">Start Date</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.duedate ? 'checked' : '' %>
+                      name="optionduedate">
+                    <label class="form-check-label" for="Due Date">Due Date</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-auto">
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.estimatedtime ? 'checked' : '' %>
+                      name="optionestimatedtime">
+                    <label class="form-check-label" for="estimatedtime">Estimated Time</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.spenttime ? 'checked' : '' %>
+                      name="optionspenttime">
+                    <label class="form-check-label" for="Spent Time">Spent Time</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.targetversion ? 'checked' : '' %>
+                      name="optiontargetversion">
+                    <label class="form-check-label" for="Target Version">Target Version</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-auto">
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.author ? 'checked' : '' %>
+                      name="optionauthor">
+                    <label class="form-check-label" for="author">Author</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.createddate ? 'checked' : '' %>
+                      name="optioncreateddate">
+                    <label class="form-check-label" for="Created Date">Created Date</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.updateddate ? 'checked' : '' %>
+                      name="optionupdateddate">
+                    <label class="form-check-label" for="Updated Date">Updated Date</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-auto">
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.closeddate ? 'checked' : '' %>
+                      name="optioncloseddate">
+                    <label class="form-check-label" for="closeddate">Closed Date</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.parenttask ? 'checked' : '' %>
+                      name="optionparenttask">
+                    <label class="form-check-label" for="Parent Task">Parent Task</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.done ? 'checked' : '' %>
+                      name="optiondone">
+                    <label class="form-check-label" for="Done">Done</label>
                   </div>
                 </div>
               </div>
@@ -173,6 +289,88 @@
         </div>
         <button class="btn btn-primary" type="submit">Apply</button>
       </form>
+    </div>
+    <div class="container mt-3">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th <%= option.issueid ? '' : 'hidden' %>>
+              <div>#</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=issueid&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'issueid' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=issueid&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'issueid' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.subject ? '' : 'hidden' %>>
+              <div>Subject</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=subject&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'subject' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=subject&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'subject' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.tracker ? '' : 'hidden' %>>
+              <div>Tracker</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=tracker&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'tracker' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=tracker&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'tracker' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.issueid || option.subject || option.tracker ? '' : 'hidden' %>>
+              <div>Actions</div>
+            </th>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tdata">
+          <% let p = isNaN(parseInt(result.page)) || parseInt(result.page) === 0 ? 1 : parseInt(result.page); %>
+          <% let list = result.data %>
+          <% list.forEach((el, index) =>{ 
+                %>
+          <tr>
+            <td <%= option.issueid ? '' : 'hidden' %>><%= el.issueid || '' %></td>
+            <td <%= option.subject ? '' : 'hidden' %>><%= el.subject || '' %></td>
+            <td <%= option.tracker ? '' : 'hidden' %>><%= el.tracker || '' %></td>
+            <td <%= option.issueid || option.subject || option.tracker ? '' : 'hidden' %>>
+              <div>
+                <a href="/projects/issues/edit/<%=projectid%>/<%= el.issueid %>" class="btn btn-success">Edit</a>
+                <a href="/projects/issues/delete/<%=projectid%>/<%= el.issueid %>" class="btn btn-danger">Delete</a>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <nav>
+        <p id="pagenumber"></p>
+        <p id="filters"></p>
+        <p id="sortp"></p>
+        <p id="sortr"></p>
+        <ul id="page" class="pagination mt-2">
+          <% let size = Math.ceil(result.total / 3) %>
+          <% if (p > 1) { %>
+          <li class="page-item"><a class="page-link"
+              href="<%= `/projects/issues/${projectid}/?page=${p > 1 ? p-1 : 1}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>">Previous</a>
+          </li>
+          <% }%>
+          <% for (let i = 0; i < size; i++) { %>
+          <li class="page-item"><a class="page-link"
+              href="<%= `/projects/issues/${projectid}/?page=${i+1}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>"><%=i+1%></a>
+          </li>
+          <%}%>
+          <% if (p < size) { %>
+          <li class="page-item"><a class="page-link"
+              href="<%= `/projects/issues/${projectid}/?page=${p < size ? p+1 : size}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>">Next</a>
+          </li>
+          <% }%>
+        </ul>
+      </nav>
+      <a class="btn btn-primary" href="/projects/issues/<%=projectid%>/add">Add</a>
     </div>
   </div>
 </div>

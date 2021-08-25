@@ -98,16 +98,31 @@ router.post('/option/:projectid', (rq, rs) => {
   let data = rq.body;
   let userid = rq.session.user.userid;
   let option = []
-  if (data.optionuserid) option.push('userid');
-  if (data.optionname) option.push('name')
-  if (data.optionposition) option.push('position')
-  db.query(`UPDATE users set memberoption = $1
+  if (data.optionissueid) option.push('issueid');
+  if (data.optionsubject) option.push('subject')
+  if (data.optiontracker) option.push('tracker')
+  if (data.optionstatus) option.push('status');
+  if (data.optionpriority) option.push('priority')
+  if (data.optionassignee) option.push('assignee')
+  if (data.optiondescription) option.push('description');
+  if (data.optionstartdate) option.push('startdate')
+  if (data.optionduedate) option.push('duedate')
+  if (data.optionestimatedtime) option.push('estimatedtime');
+  if (data.optionspenttime) option.push('spenttime')
+  if (data.optiontargetversion) option.push('targetversion')
+  if (data.optionauthor) option.push('author');
+  if (data.optioncreateddate) option.push('createddate')
+  if (data.optionupdateddate) option.push('updateddate')
+  if (data.optioncloseddate) option.push('closeddate');
+  if (data.optionparenttask) option.push('parenttask')
+  if (data.optiondone) option.push('done')
+  db.query(`UPDATE users set issueoption = $1
   WHERE userid = $2`,
     [
       option,
       userid
     ], (err, res) => {
-      rs.redirect(`/projects/members/${rq.params.projectid}`)
+      rs.redirect(`/projects/issues/${rq.params.projectid}`)
     })
 })
 
