@@ -1,0 +1,179 @@
+<%- include('../../partials/header'); %>
+<%- include('../../partials/topbar'); %>
+<div class="d-flex vh-100">
+  <%- include('../../partials/sidebar'); %>
+  <div class="px-3 py-3 vw-100">
+    <h2>Issues</h2>
+    <hr>
+    <h4>Filters</h4>
+    <div id="filterform" class="container">
+      <form action="/projects/issues/<%=projectid%>" method="GET" id="browse">
+        <div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkissueid">
+                <label class="form-check-label" for="ID">ID</label>
+              </div>
+              <div class="container">
+                <input class="form-control" type="number" name="issueid" step="1" placeholder="ID">
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checksubject">
+                <label class="form-check-label" for="Name">Subject</label>
+              </div>
+              <div class="container">
+                <input class="form-control" type="text" name="subject" placeholder="Name">
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checktracker">
+                <label class="form-check-label" for="tracker">Tracker</label>
+              </div>
+              <div class="container">
+                <select class="form-control" id="inputtracker" name="tracker">
+                  <option disabled selected> Choose the Tracker ...</option>
+                  <option value="bug"> Bug</option>
+                  <option value="feature"> Feature</option>
+                  <option value="support"> Support</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkstatus">
+                <label class="form-check-label" for="status">Status</label>
+              </div>
+              <div class="container">
+                <select class="form-control" id="inputstatus" name="status">
+                  <option disabled selected> Choose the Status ...</option>
+                  <option value="new">New</option>
+                  <option value="in progress">In Progress</option>
+                  <option value="resolved">Resolved</option>
+                  <option value="feedback">Feedback</option>
+                  <option value="closed">Closed</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkpriority">
+                <label class="form-check-label" for="status">Priority</label>
+              </div>
+              <div class="container">
+                <select class="form-control" id="inputstatus" name="priority">
+                  <option disabled selected> Choose the Priority ...</option>
+                  <option value="new">New</option>
+                  <option value="in progress">In Progress</option>
+                  <option value="resolved">Resolved</option>
+                  <option value="feedback">Feedback</option>
+                  <option value="closed">Closed</option>
+                  <option value="rejected">Rejected</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkassignee">
+                <label class="form-check-label" for="Assignee">Assignee</label>
+              </div>
+              <div class="container">
+                <select class="form-control" id="inputMember" name="member">
+                  <option disabled selected> Choose the assignee ...</option>
+                  <% members.forEach( (el) => { %>
+                  <option value="<%= el.firstname %>"><%= el.firstname %></option>
+                  <%  }) %>
+                </select>
+              </div>
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+    </div>
+    <h4>Options</h4>
+    <div>
+      <form action="/projects/issues/option/<%= projectid %>" method="POST">
+        <div class="d-flex container">
+          <h6>Columns</h6>
+          <div class="row align-items-start">
+            <div class="col">
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container w-25">
+                    <input type="checkbox" class="form-check-input" <%= option.issueid ? 'checked' : '' %>
+                      name="optionissueid">
+                    <label class="form-check-label" for="ID">ID</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container w-25">
+                    <input type="checkbox" class="form-check-input" <%= option.subject ? 'checked' : '' %>
+                      name="optionsubject">
+                    <label class="form-check-label" for="Name">Subject</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container w-25">
+                    <input type="checkbox" class="form-check-input" <%= option.tracker ? 'checked' : '' %>
+                      name="optiontracker">
+                    <label class="form-check-label" for="Tracker">Tracker</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container w-25">
+                    <input type="checkbox" class="form-check-input" <%= option.status ? 'checked' : '' %>
+                      name="optionstatus">
+                    <label class="form-check-label" for="status">Status</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container w-25">
+                    <input type="checkbox" class="form-check-input" <%= option.priority ? 'checked' : '' %>
+                      name="optionpriority">
+                    <label class="form-check-label" for="Priority">Priority</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container w-25">
+                    <input type="checkbox" class="form-check-input" <%= option.assignee ? 'checked' : '' %>
+                      name="optionassignee">
+                    <label class="form-check-label" for="Assignee">Assignee</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Apply</button>
+      </form>
+    </div>
+  </div>
+</div>
+<%- include('../../partials/footer'); %>

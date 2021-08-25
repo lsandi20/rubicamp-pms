@@ -3,6 +3,7 @@ const helpers = require('../../helpers/util');
 var router = express.Router();
 const db = require('../../db')
 var membersRouter = require('./members/members');
+var issuesRouter = require('./issues/issues');
 /* GET users listing. */
 
 router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
@@ -245,5 +246,6 @@ router.get('/overview/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
 });
 
 router.use('/members', membersRouter);
+router.use('/issues', issuesRouter);
 
 module.exports = router;
