@@ -34,6 +34,9 @@ router.get('/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
     issueid: rq.query.checkissueid ? parseInt(rq.query.issueid) : null,
     subject: rq.query.checksubject ? `%${rq.query.subject.toLowerCase()}%` : null,
     tracker: rq.query.checktracker ? `${rq.query.tracker}` : null,
+    status: rq.query.checkstatus ? `${rq.query.status}` : null,
+    priority: rq.query.checkpriority ? `${rq.query.priority}` : null,
+    assignee: rq.query.checkassignee ? `%${rq.query.assignee.toLowerCase()}%` : null,
   }
   for (q in query) {
     if (query[q] === null) {
@@ -46,12 +49,18 @@ router.get('/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
     filterQuery += ' AND '
     let i = 2;
     for (q in query) {
-      if (q === 'userid') {
+      if (q === 'issueid') {
         filterQuery += `i.issueid = $${i},`
-      } else if (q === 'name') {
+      } else if (q === 'subject') {
         filterQuery += `i.subject ILIKE $${i},`
       } else if (q === 'tracker') {
         filterQuery += `i.tracker = $${i},`
+      } else if (q === 'status') {
+        filterQuery += `i.status = $${i},`
+      } else if (q === 'priority') {
+        filterQuery += `i.priority = $${i},`
+      } else if (q === 'assignee') {
+        filterQuery += `asi.firstname ILIKE $${i},`
       }
       filterArr.push(query[q]);
       i++;

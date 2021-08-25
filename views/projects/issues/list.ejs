@@ -75,12 +75,10 @@
               <div class="container">
                 <select class="form-control" id="inputstatus" name="priority">
                   <option disabled selected> Choose the Priority ...</option>
-                  <option value="new">New</option>
-                  <option value="in progress">In Progress</option>
-                  <option value="resolved">Resolved</option>
-                  <option value="feedback">Feedback</option>
-                  <option value="closed">Closed</option>
-                  <option value="rejected">Rejected</option>
+                  <option value="normal">Normal</option>
+                  <option value="high">High</option>
+                  <option value="urgent">Urgent</option>
+                  <option value="immediate">Immediate</option>
                 </select>
               </div>
             </div>
@@ -92,7 +90,7 @@
                 <label class="form-check-label" for="Assignee">Assignee</label>
               </div>
               <div class="container">
-                <select class="form-control" id="inputMember" name="member">
+                <select class="form-control" id="inputMember" name="assignee">
                   <option disabled selected> Choose the assignee ...</option>
                   <% members.forEach( (el) => { %>
                   <option value="<%= el.firstname %>"><%= el.firstname %></option>
@@ -475,9 +473,13 @@
           <tr>
             <td <%= option.issueid ? '' : 'hidden' %>><%= el.issueid || '' %></td>
             <td <%= option.subject ? '' : 'hidden' %>><%= el.subject || '' %></td>
-            <td <%= option.tracker ? '' : 'hidden' %>><%= el.tracker || '' %></td>
-            <td <%= option.status  ? '' : 'hidden' %>><%= el.status || '' %></td>
-            <td <%= option.priority  ? '' : 'hidden' %>><%= el.priority || '' %></td>
+            <td <%= option.tracker ? '' : 'hidden' %>>
+              <%= el.tracker ? el.tracker.split(' ').map(e=> e = e[0].toUpperCase() + e.slice(1)).join(' ') : '' %></td>
+            <td <%= option.status  ? '' : 'hidden' %>>
+              <%= el.status ? el.status.split(' ').map(e=> e = e[0].toUpperCase() + e.slice(1)).join(' ') : '' %></td>
+            <td <%= option.priority  ? '' : 'hidden' %>>
+              <%= el.priority ? el.priority.split(' ').map(e=> e = e[0].toUpperCase() + e.slice(1)).join(' ') : '' %>
+            </td>
             <td <%= option.assignee  ? '' : 'hidden' %>><%= el.assignee || '' %></td>
             <td <%= option.description  ? '' : 'hidden' %>><%= el.description || '' %></td>
             <td <%= option.startdate  ? '' : 'hidden' %>><%= el.startdate || '' %></td>
@@ -531,7 +533,7 @@
           </li>
           <% }%>
           <% for (let i = 0; i < size; i++) { %>
-          <li class="page-item"><a class="page-link"
+          <li class="page-item <%= p === i+1 ? 'active' : ''%>"><a class="page-link"
               href="<%= `/projects/issues/${projectid}/?page=${i+1}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>"><%=i+1%></a>
           </li>
           <%}%>

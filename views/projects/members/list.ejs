@@ -159,7 +159,7 @@
           </li>
           <% }%>
           <% for (let i = 0; i < size; i++) { %>
-          <li class="page-item"><a class="page-link"
+          <li class="page-item <%= p === i+1 ? 'active' : ''%>"><a class="page-link"
               href="<%= `/projects/members/${projectid}/?page=${i+1}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>"><%=i+1%></a>
           </li>
           <%}%>
