@@ -321,7 +321,147 @@
                   class="arrow arrow-down <%= (sort.prop === 'tracker' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
               </div>
             </th>
-            <th <%= option.issueid || option.subject || option.tracker ? '' : 'hidden' %>>
+            <th <%= option.status ? '' : 'hidden' %>>
+              <div>Status</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=status&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'status' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=status&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'status' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.priority ? '' : 'hidden' %>>
+              <div>Priority</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=priority&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'priority' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=priority&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'priority' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.assignee ? '' : 'hidden' %>>
+              <div>Assignee</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=assignee&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'assignee' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=assignee&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'assignee' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.description ? '' : 'hidden' %>>
+              <div>Description</div>
+            </th>
+            <th <%= option.startdate ? '' : 'hidden' %>>
+              <div>Start Date</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=startdate&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'startdate' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=startdate&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'startdate' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.duedate ? '' : 'hidden' %>>
+              <div>Due Date</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=duedate&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'duedate' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=duedate&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'duedate' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.estimatedtime ? '' : 'hidden' %>>
+              <div>Estimated Time</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=estimatedtime&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'estimatedtime' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=estimatedtime&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'estimatedtime' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.spenttime ? '' : 'hidden' %>>
+              <div>Spent Time</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=spenttime&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'spenttime' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=spenttime&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'spenttime' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.targetversion ? '' : 'hidden' %>>
+              <div>Target Version</div>
+            </th>
+            <th <%= option.author ? '' : 'hidden' %>>
+              <div>Author</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=author&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'author' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=author&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'author' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.createddate ? '' : 'hidden' %>>
+              <div>Created Date</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=createddate&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'createddate' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=createddate&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'createddate' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.updateddate ? '' : 'hidden' %>>
+              <div>Updated Date</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=updateddate&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'updateddate' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=updateddate&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'updateddate' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.closeddate ? '' : 'hidden' %>>
+              <div>Closed Date</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=closeddate&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'closeddate' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=closeddate&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'closeddate' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.parenttask ? '' : 'hidden' %>>
+              <div>Parent Task</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=parenttask&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'parenttask' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=parenttask&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'parenttask' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.done ? '' : 'hidden' %>>
+              <div>Done</div>
+              <div>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=done&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'done' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/projects/issues/${projectid}/?${query}&sortp=done&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'done' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.issueid || 
+            option.subject || 
+            option.tracker ||
+            option.status ||
+            option.priority ||
+            option.assignee ||
+            option.description ||
+            option.startdate ||
+            option.duedate ||
+            option.estimatedtime ||
+            option.spenttime ||
+            option.targetversion ||
+            option.author ||
+            option.createddate ||
+            option.updateddate ||
+            option.closeddate ||
+            option.parenttask ||
+            option.done ? '' : 'hidden' %>>
               <div>Actions</div>
             </th>
             </th>
@@ -336,7 +476,39 @@
             <td <%= option.issueid ? '' : 'hidden' %>><%= el.issueid || '' %></td>
             <td <%= option.subject ? '' : 'hidden' %>><%= el.subject || '' %></td>
             <td <%= option.tracker ? '' : 'hidden' %>><%= el.tracker || '' %></td>
-            <td <%= option.issueid || option.subject || option.tracker ? '' : 'hidden' %>>
+            <td <%= option.status  ? '' : 'hidden' %>><%= el.status || '' %></td>
+            <td <%= option.priority  ? '' : 'hidden' %>><%= el.priority || '' %></td>
+            <td <%= option.assignee  ? '' : 'hidden' %>><%= el.assignee || '' %></td>
+            <td <%= option.description  ? '' : 'hidden' %>><%= el.description || '' %></td>
+            <td <%= option.startdate  ? '' : 'hidden' %>><%= el.startdate || '' %></td>
+            <td <%= option.duedate  ? '' : 'hidden' %>><%= el.duedate || '' %></td>
+            <td <%= option.estimatedtime  ? '' : 'hidden' %>><%= el.estimatedtime || '' %></td>
+            <td <%= option.spenttime  ? '' : 'hidden' %>><%= el.spenttime || '' %></td>
+            <td <%= option.targetversion  ? '' : 'hidden' %>><%= el.targetversion || '' %></td>
+            <td <%= option.author  ? '' : 'hidden' %>><%= el.author || '' %></td>
+            <td <%= option.createddate  ? '' : 'hidden' %>><%= el.createddate || '' %></td>
+            <td <%= option.updateddate  ? '' : 'hidden' %>><%= el.updateddate || '' %></td>
+            <td <%= option.closeddate  ? '' : 'hidden' %>><%= el.closeddate || '' %></td>
+            <td <%= option.parenttask  ? '' : 'hidden' %>><%= el.parenttask || '' %></td>
+            <td <%= option.done  ? '' : 'hidden' %>><%= el.done || '' %></td>
+            <td <%= option.issueid || 
+            option.subject || 
+            option.tracker ||
+            option.status ||
+            option.priority ||
+            option.assignee ||
+            option.description ||
+            option.startdate ||
+            option.duedate ||
+            option.estimatedtime ||
+            option.spenttime ||
+            option.targetversion ||
+            option.author ||
+            option.createddate ||
+            option.updateddate ||
+            option.closeddate ||
+            option.parenttask ||
+            option.done ? '' : 'hidden' %>>
               <div>
                 <a href="/projects/issues/edit/<%=projectid%>/<%= el.issueid %>" class="btn btn-success">Edit</a>
                 <a href="/projects/issues/delete/<%=projectid%>/<%= el.issueid %>" class="btn btn-danger">Delete</a>
