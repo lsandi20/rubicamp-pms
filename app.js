@@ -3,9 +3,10 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var fileupload = require('express-fileupload');
 
 var indexRouter = require('./routes/index');
-var projectsRouter = require('./routes/projects/projects');
+var projectsRouter = require('./routes/projects/projects')(__dirname);
 var profileRouter = require('./routes/profile');
 
 require('dotenv').config();
@@ -18,6 +19,8 @@ app.use(session({
   saveUninitialized: false,
   resave: false
 }))
+
+app.use(fileupload());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
