@@ -1,6 +1,5 @@
-const { isArray } = require('util');
-
 module.exports = function (dirname) {
+  var fs = require('fs');
   var express = require('express');
   const helpers = require('../../../helpers/util');
   var router = express.Router();
@@ -178,15 +177,24 @@ module.exports = function (dirname) {
 
   })
 
-  router.get('/delete/:projectid/:userid', (rq, rs) => {
-    db.query(`DELETE FROM members WHERE userid = $1 AND projectid = $2`,
-      [
-        rq.params.userid,
-        rq.params.projectid
-      ], (err, res) => {
-        rs.status(200);
-        rs.redirect(`/projects/members/${rq.params.projectid}`)
-      })
+  router.get('/delete/:projectid/:issueid', (rq, rs) => {
+    db.query(`SELECT files FROM issues WHERE issueid = $1`, [
+      rq.params.issueid,
+    ], (err, result) => {
+      if (result.rows[0].files !== null) {
+        result.rows[0].files.forEach((f) => {
+          fs.unlinkSync(f.path);
+        })
+      }
+      db.query(`DELETE FROM issues WHERE issueid = $1`,
+        [
+          rq.params.issueid,
+        ], (err, res) => {
+          rs.status(200);
+          rs.redirect(`/projects/issues/${rq.params.projectid}`)
+        })
+    })
+
   })
 
   router.get('/edit/:projectid/:userid', helpers.isLoggedIn, (rq, rs) => {
