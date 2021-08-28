@@ -39,6 +39,11 @@ module.exports = function (dirname) {
       name: rq.query.checkname ? `%${rq.query.name.toLowerCase()}%` : null,
       member: rq.query.checkmember ? `%${rq.query.member}%` : null,
     }
+    let check = {
+      projectid: rq.query.checkprojectid ? 'on' : null,
+      name: rq.query.checkname ? `on` : null,
+      member: rq.query.checkmember ? `on` : null,
+    }
     for (q in query) {
       if (query[q] === null) {
         delete query[q];

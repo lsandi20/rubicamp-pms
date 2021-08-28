@@ -149,7 +149,7 @@ module.exports = function (dirname) {
     let data = rq.body;
     let files = [];
     let promiseArray = [];
-    if (Array.isArray(rq.files.files)) {
+    if (rq.files !== null && Array.isArray(rq.files.files)) {
       rq.files.files.forEach((f) => {
         let fileuri = path.join(dirname, 'public/files', `${Date.now()}${f.name}`)
         files.push({ name: f.name, type: f.mimetype, path: fileuri })
@@ -166,7 +166,7 @@ module.exports = function (dirname) {
         ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING *;`,
         [
           rq.params.projectid,
-          data.tracker || null, data.subject || null, data.description || null, data.status || null, data.priority || null, data.assignee || null, data.startdate || null, data.duedate || null, data.estimatedtime || null, data.spenttime || null, data.targetversion || null, data.author || null, data.createddate || null, data.updateddate || null, data.closeddate || null, data.parenttask || null, data.done || null,
+          data.tracker, data.subject || null, data.description || null, data.status, data.priority, data.assignee || null, data.startdate, data.duedate || null, data.estimatedtime, data.spenttime || null, data.targetversion || null, rq.session.user.userid, new Date(), new Date(), data.closeddate || null, data.parenttask || null, data.done || null,
           files || null
         ],
         (err, res) => {
@@ -181,15 +181,19 @@ module.exports = function (dirname) {
     db.query(`SELECT files FROM issues WHERE issueid = $1`, [
       rq.params.issueid,
     ], (err, result) => {
-      if (result.rows[0].files !== null) {
-        result.rows[0].files.forEach((f) => {
-          fs.unlinkSync(f.path);
-        })
-      }
       db.query(`DELETE FROM issues WHERE issueid = $1`,
         [
           rq.params.issueid,
         ], (err, res) => {
+          if (result.rows[0].files !== null) {
+            result.rows[0].files.forEach((f) => {
+              try {
+                fs.unlinkSync(f.path);
+              } catch (error) {
+                console.error('file not found');
+              }
+            })
+          }
           rs.status(200);
           rs.redirect(`/projects/issues/${rq.params.projectid}`)
         })
@@ -200,6 +204,16 @@ module.exports = function (dirname) {
   router.get('/edit/:projectid/:userid', helpers.isLoggedIn, (rq, rs) => {
     db.query(`SELECT m.userid, u.firstname, m.role FROM members m INNER JOIN users u USING(userid) WHERE m.projectid = $1 AND m.userid = $2`, [rq.params.projectid, rq.params.userid], (err, res) => {
       rs.render('projects/members/form', { nav: 'projects', side: 'members', user: rq.session.user, projectid: rq.params.projectid, members: res.rows, form: 'edit' });
+    })
+  })
+
+  router.get('/edit/:projectid/:issueid', helpers.isLoggedIn, (rq, rs) => {
+    db.query(`SELECT u.userid, u.firstname FROM members m INNER JOIN users u ON m.userid = u.userid WHERE m.projectid = $1`, [rq.params.projectid], (err, res) => {
+      db.query(`SELECT * FROM issues WHERE issueid = $1`, [rq.params.issueid],
+        (err, result) => {
+          console.log(err);
+          rs.render('projects/issues/edit', { nav: 'projects', side: 'issues', user: rq.session.user, projectid: rq.params.projectid, issueid: rq.params.issueid, members: res.rows, result: result.rows[0] });
+        })
     })
   })
 

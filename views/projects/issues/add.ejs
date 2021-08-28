@@ -21,7 +21,7 @@
                     <label class="form-check-label" for="bug">Bug</label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="tracker" value="feature">
+                    <input class="form-check-input" type="radio" name="tracker" value="feature" checked>
                     <label class="form-check-label" for="feature">Feature</label>
                   </div>
                   <div class="form-check">
@@ -52,7 +52,7 @@
                 </div>
                 <div class="container">
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="status" value="new">
+                    <input class="form-check-input" type="radio" name="status" value="new" checked>
                     <label class="form-check-label" for="new">New</label>
                   </div>
                   <div class="form-check">
@@ -83,7 +83,7 @@
                 </div>
                 <div class="container">
                   <div class="form-check">
-                    <input class="form-check-input" type="radio" name="priority" value="normal">
+                    <input class="form-check-input" type="radio" name="priority" value="normal" checked>
                     <label class="form-check-label" for="normal">Normal</label>
                   </div>
                   <div class="form-check">
@@ -120,7 +120,7 @@
                   <label class="form-check-label" for="startdate">Start Date</label>
                 </div>
                 <div class="container">
-                  <input class="form-control" type="date" name="startdate" placeholder="Start Date">
+                  <input class="form-control" type="date" name="startdate" placeholder="Start Date" required>
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -136,8 +136,8 @@
                   <label class="form-check-label" for="estimatedtime">Estimated Time</label>
                 </div>
                 <div class="container">
-                  <input class="form-control" type="number" step="any" name="estimatedtime"
-                    placeholder="Estimated Time">
+                  <input class="form-control" type="number" step="any" name="estimatedtime" placeholder="Estimated Time"
+                    value="0">
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -152,8 +152,17 @@
                 <div class="container w-25">
                   <label class="form-check-label" for="files">files</label>
                 </div>
-                <div class="container">
-                  <input class="form-control" type="file" name="files" placeholder="file" multiple>
+                <div class="container" id="filecontainer">
+                  <div class="fileuploader">
+                    <div class="row mb-3">
+                      <div class="d-flex flex-row">
+                        <input class="form-control" type="file" name="files" placeholder="file"
+                          onchange="showPreview(event)">
+                        <button class="btn btn-outline-danger rmfile ms-3" onclick="removeFile(event)" hidden>-</button>
+                      </div>
+                    </div>
+                    <button class="btn btn-outline-primary" onclick="addFile(event)">+</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -165,4 +174,44 @@
   </div>
 </div>
 </div>
+<script>
+  function showPreview(event) {
+    let fileInput = event.target;
+    if (fileInput.parentNode.previousElementSibling) {
+      fileInput.parentNode.previousElementSibling.remove();
+    }
+    let imgsrc = URL.createObjectURL(fileInput.files[0]);
+    if (fileInput.files[0].type.includes('image')) {
+      fileInput.parentNode.insertAdjacentHTML('beforebegin', `<div><img style="height: 100px; width: 100px" class="img- mb-2" src="${imgsrc}"></div>`)
+    }
+    let filerm = fileInput.nextElementSibling;
+    filerm.hidden = false;
+  }
+  function removeFile(event) {
+    event.preventDefault()
+    let filerm = event.target;
+    let fileInput = filerm.previousElementSibling;
+    if (fileInput.files.length > 0 && fileInput.files[0].type.includes('image')) {
+      fileInput.parentNode.previousElementSibling.remove();
+    }
+    fileInput.value = '';
+    filerm.hidden = true;
+    let fileuploader = filerm.closest('.fileuploader');
+    if (fileuploader.children.length > 2) {
+      event.target.parentNode.parentNode.remove();
+    }
+  }
+
+  function addFile(event) {
+    event.preventDefault();
+    let fileInput = event.target.previousElementSibling.cloneNode(true);
+    fileInput.querySelector('.form-control').value = '';
+    let filerm = fileInput.querySelector('.rmfile');
+    filerm.hidden = false;
+    if (fileInput.children.length > 1) {
+      fileInput.firstElementChild.remove();
+    }
+    event.target.parentNode.insertBefore(fileInput, event.target);
+  }
+</script>
 <%- include('../../partials/footer'); %>
