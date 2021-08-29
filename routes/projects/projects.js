@@ -70,8 +70,14 @@ module.exports = function (dirname) {
       filterQuery = filterQuery.join(' AND ')
     }
     db.query(`SELECT userid, firstname FROM users`, (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       let members = res.rows;
       db.query(`SELECT projectoption from users WHERE userid = ${rq.session.user.userid}`, (err, res) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
         let option = { projectid: false, name: false, members: false }
         if (res.rows[0].projectoption.length > 0) {
           res.rows[0].projectoption.forEach(el => {
@@ -80,10 +86,13 @@ module.exports = function (dirname) {
         }
         db.query(`SELECT projectid, name, members FROM (SELECT p.projectid, p.name, string_agg(u.firstname, ',' ORDER BY u.userid) members FROM projects p LEFT JOIN members m ON p.projectid = m.projectid LEFT JOIN users u ON u.userid = m.userid GROUP BY p.projectid) AS projectmember ${filterQuery} ORDER BY ${sort.prop} ${sort.rule} LIMIT 3 OFFSET ${rq.query.page ? (rq.query.page - 1) * 3 : 0}`, filterArr, (err, res) => {
           if (err) {
-            return rs.status(500).end()
+            return rs.status(500).send(err);
           }
           let data = res.rows;
           db.query(`SELECT COUNT(projectid) AS total FROM (SELECT projectid, name, members FROM (SELECT p.projectid, p.name, string_agg(u.firstname, ',' ORDER BY u.userid) members FROM projects p LEFT JOIN members m ON p.projectid = m.projectid LEFT JOIN users u ON u.userid = m.userid GROUP BY p.projectid) AS projectmember ${filterQuery} ORDER BY ${sort.prop} ${sort.rule}  ) as projects`, filterArr, (err, res) => {
+            if (err) {
+              return rs.status(500).send(err);
+            }
             let result = {
               data,
               page: parseInt(rq.query.page),
@@ -100,6 +109,9 @@ module.exports = function (dirname) {
 
   router.get('/add', helpers.isLoggedIn, (rq, rs) => {
     db.query('SELECT userid, firstname, lastname FROM users', (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       rs.render('projects/form', { nav: 'projects', user: rq.session.user, members: res.rows, form: 'add' });
     })
   })
@@ -119,6 +131,9 @@ module.exports = function (dirname) {
       [
         data.name
       ], (err, res) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
         let projectid = res.rows[0].projectid;
         let valuesvar = '';
         let valuesvalue = []
@@ -142,6 +157,9 @@ module.exports = function (dirname) {
         db.query(`INSERT INTO members(userid, projectid) VALUES ${valuesvar} RETURNING *`,
           valuesvalue,
           (err, res) => {
+            if (err) {
+              return rs.status(500).send(err);
+            }
             rs.redirect('/projects')
             rs.status(201);
           })
@@ -150,8 +168,14 @@ module.exports = function (dirname) {
 
   router.get('/edit/:projectid', helpers.isLoggedIn, (rq, rs) => {
     db.query(`SELECT projectid, name, members FROM (SELECT p.projectid, p.name, array_agg(u.userid) members FROM projects p LEFT JOIN members m ON p.projectid = m.projectid LEFT JOIN users u ON u.userid = m.userid GROUP BY p.projectid) AS projectmember WHERE projectid = $1`, [rq.params.projectid], (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       let project = res.rows[0];
       db.query(`SELECT userid, firstname, lastname FROM users`, (err, res) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
         let members = res.rows;
         rs.render('projects/form', { nav: 'projects', user: rq.session.user, members, form: 'edit', project });
       });
@@ -165,7 +189,13 @@ module.exports = function (dirname) {
         data.name,
         rq.params.projectid
       ], (err, res) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
         db.query(`DELETE FROM members WHERE projectid = $1`, [rq.params.projectid], (err, res) => {
+          if (err) {
+            return rs.status(500).send(err);
+          }
           let members = [];
           if (Array.isArray(data.userid)) {
             members = data.userid
@@ -197,6 +227,9 @@ module.exports = function (dirname) {
           db.query(`INSERT INTO members(userid, projectid) VALUES ${valuesvar} RETURNING *`,
             valuesvalue,
             (err, res) => {
+              if (err) {
+                return rs.status(500).send(err);
+              }
               rs.redirect('/projects')
               rs.status(201);
             })
@@ -210,6 +243,9 @@ module.exports = function (dirname) {
       [
         rq.params.projectid
       ], (err, res) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
         rs.status(200);
         rs.redirect('/projects')
       })
@@ -228,6 +264,9 @@ module.exports = function (dirname) {
         option,
         userid
       ], (err, res) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
         rs.redirect('/projects')
       })
   })
@@ -236,6 +275,9 @@ module.exports = function (dirname) {
     db.query(`SELECT p.name, array_agg(u.firstname || ' ' || u.lastname) AS members FROM projects p LEFT JOIN members m USING(projectid) LEFT JOIN users u USING(userid) WHERE p.projectid = $1 GROUP BY p.name`,
       [rq.params.projectid],
       (err, res) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
         let project = res.rows[0];
         db.query(`SElECT 
     COUNT(*) FILTER (WHERE tracker = 'bug' AND status != 'Closed') AS bugopen ,COUNT(*) FILTER (WHERE tracker = 'bug') AS bugtotal,
@@ -245,6 +287,9 @@ module.exports = function (dirname) {
     `,
           [rq.params.projectid],
           (err, res) => {
+            if (err) {
+              return rs.status(500).send(err);
+            }
             let issuecount = res.rows[0];
             rs.render('projects/overview/view', { nav: 'projects', side: 'overview', projectid: rq.params.projectid, user: rq.session.user, project, issuecount });
           })

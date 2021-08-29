@@ -2,7 +2,6 @@ var express = require('express');
 var router = express.Router();
 let db = require('../db');
 const bcrypt = require('bcrypt');
-const saltRound = 10;
 /* GET home page. */
 router.get('/', function (req, res, next) {
   if (req.session.user) {
@@ -14,7 +13,10 @@ router.get('/', function (req, res, next) {
 router.post('/auth', function (req, rs, next) {
   const { email, password } = req.body
   db.query(`SELECT * FROM users WHERE email = $1`, [email], (err, res) => {
-    if (err || res.rows.length === 0) {
+    if (err) {
+      return rs.status(500).send(err);
+    }
+    if (res.rows.length === 0) {
       return rs.redirect('/');
     }
     let data = res.rows[0];

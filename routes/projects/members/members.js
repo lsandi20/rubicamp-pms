@@ -61,6 +61,9 @@ router.get('/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
     filterQuery = filterQuery.join(' AND ')
   }
   db.query(`SELECT memberoption from users WHERE userid = ${rq.session.user.userid}`, (err, res) => {
+    if (err) {
+      return rs.status(500).send(err);
+    }
     let option = { userid: false, name: false, position: false }
     if (res.rows[0].memberoption.length > 0) {
       res.rows[0].memberoption.forEach(el => {
@@ -69,10 +72,13 @@ router.get('/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
     }
     db.query(`SELECT u.userid , u.firstname , m.role FROM members m INNER JOIN users u ON m.userid = u.userid ${filterQuery} ORDER BY ${sort.prop} ${sort.rule} LIMIT 3 OFFSET ${rq.query.page ? (rq.query.page - 1) * 3 : 0}`, filterArr, (err, res) => {
       if (err) {
-        return rs.status(500).end()
+        return rs.status(500).send(err);
       }
       let data = res.rows;
       db.query(`SELECT COUNT(userid) AS total FROM (SELECT u.userid , u.firstname , m.role FROM members m INNER JOIN users u USING(userid) ${filterQuery} ORDER BY ${sort.prop} ${sort.rule}  ) as members`, filterArr, (err, res) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
         let result = {
           data,
           page: parseInt(rq.query.page),
@@ -100,12 +106,18 @@ router.post('/option/:projectid', (rq, rs) => {
       option,
       userid
     ], (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       rs.redirect(`/projects/members/${rq.params.projectid}`)
     })
 })
 
 router.get('/:projectid/add', helpers.isLoggedIn, (rq, rs) => {
   db.query('SELECT * FROM users WHERE userid NOT IN (SELECT userid FROM members WHERE projectid = $1);', [rq.params.projectid], (err, res) => {
+    if (err) {
+      return rs.status(500).send(err);
+    }
     rs.render('projects/members/form', { nav: 'projects', side: 'members', user: rq.session.user, projectid: rq.params.projectid, members: res.rows, form: 'add' });
   })
 })
@@ -120,6 +132,9 @@ router.post('/:projectid', (rq, rs) => {
       rq.body.role
     ],
     (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       rs.redirect(`/projects/members/${rq.params.projectid}`)
       rs.status(201);
     })
@@ -131,6 +146,9 @@ router.get('/delete/:projectid/:userid', (rq, rs) => {
       rq.params.userid,
       rq.params.projectid
     ], (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       rs.status(200);
       rs.redirect(`/projects/members/${rq.params.projectid}`)
     })
@@ -138,6 +156,9 @@ router.get('/delete/:projectid/:userid', (rq, rs) => {
 
 router.get('/edit/:projectid/:userid', helpers.isLoggedIn, (rq, rs) => {
   db.query(`SELECT m.userid, u.firstname, m.role FROM members m INNER JOIN users u USING(userid) WHERE m.projectid = $1 AND m.userid = $2`, [rq.params.projectid, rq.params.userid], (err, res) => {
+    if (err) {
+      return rs.status(500).send(err);
+    }
     rs.render('projects/members/form', { nav: 'projects', side: 'members', user: rq.session.user, projectid: rq.params.projectid, members: res.rows, form: 'edit' });
   })
 })
@@ -150,6 +171,9 @@ router.post('/edit/:projectid/:userid', (rq, rs) => {
       rq.params.projectid,
       rq.params.userid
     ], (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       rs.status(201);
       rs.redirect(`/projects/members/${rq.params.projectid}`)
     })

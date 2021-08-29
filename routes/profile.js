@@ -9,6 +9,9 @@ const saltRound = 10;
 router.get('/', helpers.isLoggedIn, function (req, rs, next) {
   db.query(`SELECT email, password, position , fulltime FROM users WHERE users.userid = $1`,
     [req.session.user.userid], (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       rs.render('profile/form', { nav: 'profile', user: req.session.user, profile: res.rows[0] });
       rs.status(200);
     })
@@ -23,6 +26,9 @@ router.post('/', function (req, res, next) {
       data.fulltime ? true : false,
       data.userid
     ], (err) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       res.redirect('/profile')
     })
   } else {

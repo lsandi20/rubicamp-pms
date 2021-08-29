@@ -73,8 +73,14 @@ module.exports = function (dirname) {
       filterQuery = filterQuery.join(' AND ')
     }
     db.query(`SELECT u.firstname FROM members m INNER JOIN users u ON m.userid = u.userid WHERE m.projectid = $1`, [rq.params.projectid], (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       let members = res.rows;
       db.query(`SELECT issueoption from users WHERE userid = ${rq.session.user.userid}`, (err, res) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
         let option = { userid: false, name: false, position: false }
         if (res.rows[0].issueoption.length > 0) {
           res.rows[0].issueoption.forEach(el => {
@@ -85,11 +91,14 @@ module.exports = function (dirname) {
     FROM issues i LEFT JOIN users asi ON asi.userid = i.assignee LEFT JOIN users au ON au.userid = i.author LEFT JOIN  issues pt ON pt.issueid = i.parenttask
      ${filterQuery} ORDER BY ${sort.prop} ${sort.rule} LIMIT 3 OFFSET ${rq.query.page ? (rq.query.page - 1) * 3 : 0}`, filterArr, (err, res) => {
           if (err) {
-            return rs.status(500).end()
+            return rs.status(500).send(err);
           }
           let data = res.rows;
           db.query(`SELECT COUNT(issueid) AS total FROM (SELECT i.issueid, i.tracker, i.subject, i.description, i.status, i.priority, asi.firstname as assignee, i.startdate, i.duedate, i.estimatedtime, i.spenttime, i.targetversion, au.firstname as author, i.createddate, i.updateddate, i.closeddate, pt.subject AS parenttask, i.done
         FROM issues i LEFT JOIN users asi ON asi.userid = i.assignee LEFT JOIN users au ON au.userid = i.author LEFT JOIN  issues pt ON pt.issueid = i.parenttask ${filterQuery} ORDER BY ${sort.prop} ${sort.rule}  ) as issues`, filterArr, (err, res) => {
+            if (err) {
+              return rs.status(500).send(err);
+            }
             let result = {
               data,
               page: parseInt(rq.query.page),
@@ -133,12 +142,18 @@ module.exports = function (dirname) {
         option,
         userid
       ], (err, res) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
         rs.redirect(`/projects/issues/${rq.params.projectid}`)
       })
   })
 
   router.get('/:projectid/add', helpers.isLoggedIn, (rq, rs) => {
     db.query(`SELECT u.userid, u.firstname FROM members m INNER JOIN users u ON m.userid = u.userid WHERE m.projectid = $1`, [rq.params.projectid], (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       rs.render('projects/issues/add', { nav: 'projects', side: 'issues', user: rq.session.user, projectid: rq.params.projectid, members: res.rows });
     })
   })
@@ -173,9 +188,16 @@ module.exports = function (dirname) {
           files || null
         ],
         (err, res) => {
+          if (err) {
+            return rs.status(500).send(err);
+          }
           rs.redirect(`/projects/issues/${rq.params.projectid}`)
           rs.status(201);
         })
+    }).catch(err => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
     })
 
   })
@@ -184,10 +206,16 @@ module.exports = function (dirname) {
     db.query(`SELECT files FROM issues WHERE issueid = $1`, [
       rq.params.issueid,
     ], (err, result) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       db.query(`DELETE FROM issues WHERE issueid = $1`,
         [
           rq.params.issueid,
         ], (err, res) => {
+          if (err) {
+            return rs.status(500).send(err);
+          }
           if (result.rows[0].files !== null) {
             result.rows[0].files.forEach((f) => {
               try {
@@ -206,9 +234,18 @@ module.exports = function (dirname) {
 
   router.get('/edit/:projectid/:issueid', helpers.isLoggedIn, (rq, rs) => {
     db.query(`SELECT u.userid, u.firstname FROM members m INNER JOIN users u ON m.userid = u.userid WHERE m.projectid = $1`, [rq.params.projectid], (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       db.query(`SELECT issueid, subject FROM issues`, [], (err, data) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
         db.query(`SELECT *, TO_CHAR (startdate, 'YYYY-MM-DD') startdate, TO_CHAR (duedate, 'YYYY-MM-DD') duedate , TO_CHAR (createddate, 'YYYY-MM-DD') createddate, TO_CHAR (updateddate, 'YYYY-MM-DD') updateddate, users.firstname as author FROM issues INNER JOIN users ON issues.author = users.userid WHERE issueid = $1`, [rq.params.issueid],
           (err, result) => {
+            if (err) {
+              return rs.status(500).send(err);
+            }
             rs.render('projects/issues/edit', { nav: 'projects', side: 'issues', user: rq.session.user, projectid: rq.params.projectid, issueid: rq.params.issueid, members: res.rows, result: result.rows[0], issues: data.rows });
           })
       })
@@ -218,6 +255,9 @@ module.exports = function (dirname) {
 
   router.post('/edit/:projectid/:issueid', (rq, rs) => {
     db.query(`SELECT status FROM issues WHERE issueid = $1`, [rq.params.issueid], (err, res) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
       if (res.rows[0].status = 'closed') {
         return rs.redirect(`/projects/issues/${rq.params.projectid}`);
       } else {
@@ -280,9 +320,16 @@ module.exports = function (dirname) {
               rq.params.issueid
             ],
             (err, res) => {
+              if (err) {
+                return rs.status(500).send(err);
+              }
               rs.redirect(`/projects/issues/${rq.params.projectid}`)
               rs.status(201);
             })
+        }).catch(err => {
+          if (err) {
+            return rs.status(500).send(err);
+          }
         })
 
       }
