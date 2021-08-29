@@ -1,0 +1,310 @@
+<%- include('../../partials/header'); %>
+<%- include('../../partials/topbar'); %>
+<div class="d-flex vh-100 ">
+  <%- include('../../partials/sidebar'); %>
+  <div class="px-3 py-3 vw-100">
+    <h2>New Issue</h2>
+    <hr>
+    <div class="card mb-5">
+      <div class="card-body">
+        <div id="fillformcontainer" class="container mt-3">
+          <form action="<%= `/projects/issues/edit/${projectid}/${issueid}` %>" method="POST"
+            enctype="multipart/form-data" id="fillform">
+            <div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="tracker">Tracker</label>
+                </div>
+                <div class="container">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tracker" value="bug"
+                      <%= result.tracker === 'bug' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="bug">Bug</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tracker" value="feature"
+                      <%= result.tracker === 'feature' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="feature">Feature</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="tracker" value="support"
+                      <%= result.tracker === 'support' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="support">Support</label>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="subject">Subject</label>
+                </div>
+                <div class="container">
+                  <input class="form-control" type="text" name="subject" placeholder="Subject" required
+                    value="<%= result.subject %>">
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="description">Description</label>
+                </div>
+                <div class="container">
+                  <textarea class="form-control" name="description"
+                    placeholder="Description"><%= result.description %></textarea>
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="status">Status</label>
+                </div>
+                <div class="container">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" value="new"
+                      <%= result.status === 'new' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="new">New</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" value="in progress"
+                      <%= result.status === 'in progress' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="in progress">In Progress</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" value="resolved"
+                      <%= result.status === 'resolved' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="resolved">Resolved</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" value="feedback"
+                      <%= result.status === 'feedback' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="feedback">Feedback</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" value="closed"
+                      <%= result.status === 'closed' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="closed">Closed</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="status" value="rejected"
+                      <%= result.status === 'rejected' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="rejected">Rejected</label>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="priority">Priority</label>
+                </div>
+                <div class="container">
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="priority" value="normal"
+                      <%= result.priority === 'normal' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="normal">Normal</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="priority" value="high"
+                      <%= result.priority === 'high' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="high">High</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="priority" value="urgent"
+                      <%= result.priority === 'urgent' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="urgent">Urgent</label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="priority" value="immediate"
+                      <%= result.priority === 'immediate' ? 'checked' : '' %>>
+                    <label class="form-check-label" for="immediate">Immediate</label>
+                  </div>
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="assignee">Assignee</label>
+                </div>
+                <div class="container">
+                  <select class="form-control" name="assignee">
+                    <option disabled selected> Choose the assignee ...</option>
+                    <% members.forEach( (el) => { %>
+                    <option value="<%= el.userid %>" <%= result.assignee === el.userid ? 'selected' : ''%>>
+                      <%= el.firstname %>
+                    </option>
+                    <%  }) %>
+                  </select>
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="startdate">Start Date</label>
+                </div>
+                <div class="container">
+                  <input class="form-control" type="date" name="startdate" placeholder="Start Date"
+                    value="<%= result.startdate || '' %>" required>
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="duedate">Due Date</label>
+                </div>
+                <div class="container">
+                  <input class="form-control" type="date" name="duedate" placeholder="Due Date"
+                    value="<%= result.duedate !== null ? result.duedate : '' %>">
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="estimatedtime">Estimated Time</label>
+                </div>
+                <div class="container">
+                  <input class="form-control" type="number" step="any" name="estimatedtime" placeholder="Estimated Time"
+                    value="<%= result.estimatedtime !== null ? result.estimatedtime : '' %>" required>
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="spenttime">Spent Time</label>
+                </div>
+                <div class="container">
+                  <input class="form-control" type="number" step="any" name="spenttime" placeholder="Spent Time"
+                    value="<%= result.spenttime !== null ? result.spenttime : '' %>">
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="targetversion">Target Version</label>
+                </div>
+                <div class="container">
+                  <input class="form-control" type="text" name="targetversion" placeholder="Target Version"
+                    value="<%= result.targetversion  %>">
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="author">Author</label>
+                </div>
+                <div class="container">
+                  <input class="form-control" value="<%= result.author %>" disabled>
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="createddate">Created Date</label>
+                </div>
+                <div class="container">
+                  <input class="form-control" type="date" name="createddate" placeholder="Created Date"
+                    value="<%= result.createddate %>" disabled>
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="updateddate">Updated Date</label>
+                </div>
+                <div class="container">
+                  <input class="form-control" type="date" name="updateddate" placeholder="Updated Date"
+                    value="<%= result.updateddate %>" disabled>
+                </div>
+              </div>
+              <% if (result.status === 'closed' ) { %>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="closeddate">Closed Date</label>
+                </div>
+                <div class="container">
+                  <input class="form-control" type="date" name="closeddate" placeholder="Closed Date"
+                    value="<%= result.closeddate %>" disabled>
+                </div>
+              </div>
+              <% } %>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="parenttask">Parent Task</label>
+                </div>
+                <div class="container">
+                  <select class="form-control" name="parenttask">
+                    <option disabled selected> Choose the Parent Task ...</option>
+                    <% issues.forEach( (el) => { %>
+                    <% if (el.issueid !== parseInt(issueid)) { %>
+                    <option value="<%= el.issueid %>" <%= result.parenttask === el.issueid ? 'selected' : ''%>>
+                      <%= el.subject %>
+                    </option>
+                    <% } %>
+                    <%  }) %>
+                  </select>
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="done">%done</label>
+                </div>
+                <div class="container">
+                  <input class="form-control" type="number" name="done" placeholder="%Done"
+                    value="<%= result.done || '' %>">
+                </div>
+              </div>
+              <div class="d-flex flex-row mb-3">
+                <div class="container w-25">
+                  <label class="form-check-label" for="files">files</label>
+                </div>
+                <div class="container" id="filecontainer">
+                  <% if (result.files.length > 0 ) { %>
+                  <% result.files.forEach(f => { %>
+                  <div>
+                    <input type="text" class="previousFile" name="previousFile" value="<%= JSON.stringify(f) %>" hidden>
+                    <% if (f.type.includes('image')) { %>
+                    <div><img style="width: 100px" class="img- mb-2" src="<%= `${f.path}` %>"></div>
+                    <%} %>
+                    <div>
+                      <a href="<%= `${f.path}` %>"><%= f.name %></a>
+                      <button class="btn btn-outline-danger rmfile ms-3" onclick="removePreviousFile(event)">-</button>
+                    </div>
+                  </div>
+                  <%  }) %>
+                  <% } %>
+                  <div id="fileuploader" class="mt-3">
+                    <button class="btn btn-outline-primary" onclick="addFile(event)">+</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button id="submitfillform" class="btn btn-primary" type="submit">Save</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+  function removePreviousFile(event) {
+    event.preventDefault();
+    let filevalue = event.target.parentNode.parentNode.firstElementChild.value
+    event.target.parentNode.parentNode.innerHTML = `<input type="text" name="deletedFile" value="${filevalue}" hidden>`
+  }
+
+  function addFile(event) {
+    event.preventDefault();
+    let fileuploader = document.querySelector('#fileuploader');
+    let filerow = document.createElement('div');
+    filerow.classList.add('row', 'mb-3', 'filerow');
+    filerow.innerHTML += `
+                        <div class="d-flex flex-row">
+                        <input class="form-control" type="file" name="files" placeholder="file"
+                          onchange="showPreview(event)">
+                        <button class="btn btn-outline-danger rmfile ms-3" onclick="removeFile(event)">-</button>
+                      </div>`
+    fileuploader.insertBefore(filerow, event.target)
+  }
+
+  function showPreview(event) {
+    let fileInput = event.target;
+    if (fileInput.parentNode.previousElementSibling) {
+      fileInput.parentNode.previousElementSibling.remove();
+    }
+    let imgsrc = URL.createObjectURL(fileInput.files[0]);
+    if (fileInput.files[0].type.includes('image')) {
+      fileInput.parentNode.insertAdjacentHTML('beforebegin', `<div><img style="width: 100px" class="img- mb-2" src="${imgsrc}"></div>`)
+    }
+  }
+
+  function removeFile(event) {
+    event.target.closest('.filerow').remove();
+  }
+</script>
+<%- include('../../partials/footer'); %>

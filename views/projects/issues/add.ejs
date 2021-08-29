@@ -182,7 +182,7 @@
     }
     let imgsrc = URL.createObjectURL(fileInput.files[0]);
     if (fileInput.files[0].type.includes('image')) {
-      fileInput.parentNode.insertAdjacentHTML('beforebegin', `<div><img style="height: 100px; width: 100px" class="img- mb-2" src="${imgsrc}"></div>`)
+      fileInput.parentNode.insertAdjacentHTML('beforebegin', `<div><img style="width: 100px" class="img- mb-2" src="${imgsrc}"></div>`)
     }
     let filerm = fileInput.nextElementSibling;
     filerm.hidden = false;

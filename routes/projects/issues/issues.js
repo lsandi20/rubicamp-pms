@@ -85,7 +85,6 @@ module.exports = function (dirname) {
     FROM issues i LEFT JOIN users asi ON asi.userid = i.assignee LEFT JOIN users au ON au.userid = i.author LEFT JOIN  issues pt ON pt.issueid = i.parenttask
      ${filterQuery} ORDER BY ${sort.prop} ${sort.rule} LIMIT 3 OFFSET ${rq.query.page ? (rq.query.page - 1) * 3 : 0}`, filterArr, (err, res) => {
           if (err) {
-            console.log(err);
             return rs.status(500).end()
           }
           let data = res.rows;
@@ -149,24 +148,28 @@ module.exports = function (dirname) {
     let data = rq.body;
     let files = [];
     let promiseArray = [];
-    if (rq.files !== null && Array.isArray(rq.files.files)) {
-      rq.files.files.forEach((f) => {
-        let fileuri = path.join(dirname, 'public/files', `${Date.now()}${f.name}`)
-        files.push({ name: f.name, type: f.mimetype, path: fileuri })
+    if (rq.files !== null) {
+      if (Array.isArray(rq.files.files)) {
+        rq.files.files.forEach((f) => {
+          let filename = `${Date.now()}${f.name}`
+          let fileuri = path.join(dirname, 'public/files', filename)
+          files.push({ name: f.name, type: f.mimetype, path: `/files/${filename}` })
+          promiseArray.push(f.mv(fileuri))
+        })
+      } else {
+        let f = rq.files.files
+        let filename = `${Date.now()}${f.name}`
+        let fileuri = path.join(dirname, 'public/files', filename)
+        files.push({ name: f.name, type: f.mimetype, path: `/files/${filename}` })
         promiseArray.push(f.mv(fileuri))
-      })
-    } else {
-      let f = rq.files.files
-      let fileuri = path.join(dirname, 'public/files', `${Date.now()}${f.name}`)
-      files.push({ name: f.name, type: f.mimetype, path: fileuri })
-      promiseArray.push(f.mv(fileuri))
+      }
     }
     Promise.all(promiseArray).then(() => {
-      db.query(`INSERT INTO issues(projectid, tracker, subject, description, status, priority, assignee, startdate, duedate, estimatedtime, spenttime, targetversion, author, createddate, updateddate, closeddate, parenttask, done, files) values 
-        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING *;`,
+      db.query(`INSERT INTO issues(projectid, tracker, subject, description, status, priority, assignee, startdate, duedate, estimatedtime, author, createddate, updateddate, done, files) values 
+        ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *;`,
         [
           rq.params.projectid,
-          data.tracker, data.subject || null, data.description || null, data.status, data.priority, data.assignee || null, data.startdate, data.duedate || null, data.estimatedtime, data.spenttime || null, data.targetversion || null, rq.session.user.userid, new Date(), new Date(), data.closeddate || null, data.parenttask || null, data.done || null,
+          data.tracker, data.subject || null, data.description || null, data.status, data.priority, data.assignee || null, data.startdate, data.duedate || null, data.estimatedtime, rq.session.user.userid, new Date(), new Date(), data.done || null,
           files || null
         ],
         (err, res) => {
@@ -201,33 +204,82 @@ module.exports = function (dirname) {
 
   })
 
-  router.get('/edit/:projectid/:userid', helpers.isLoggedIn, (rq, rs) => {
-    db.query(`SELECT m.userid, u.firstname, m.role FROM members m INNER JOIN users u USING(userid) WHERE m.projectid = $1 AND m.userid = $2`, [rq.params.projectid, rq.params.userid], (err, res) => {
-      rs.render('projects/members/form', { nav: 'projects', side: 'members', user: rq.session.user, projectid: rq.params.projectid, members: res.rows, form: 'edit' });
-    })
-  })
-
   router.get('/edit/:projectid/:issueid', helpers.isLoggedIn, (rq, rs) => {
     db.query(`SELECT u.userid, u.firstname FROM members m INNER JOIN users u ON m.userid = u.userid WHERE m.projectid = $1`, [rq.params.projectid], (err, res) => {
-      db.query(`SELECT * FROM issues WHERE issueid = $1`, [rq.params.issueid],
-        (err, result) => {
-          console.log(err);
-          rs.render('projects/issues/edit', { nav: 'projects', side: 'issues', user: rq.session.user, projectid: rq.params.projectid, issueid: rq.params.issueid, members: res.rows, result: result.rows[0] });
-        })
+      db.query(`SELECT issueid, subject FROM issues`, [], (err, data) => {
+        db.query(`SELECT *, TO_CHAR (startdate, 'YYYY-MM-DD') startdate, TO_CHAR (duedate, 'YYYY-MM-DD') duedate , TO_CHAR (createddate, 'YYYY-MM-DD') createddate, TO_CHAR (updateddate, 'YYYY-MM-DD') updateddate, users.firstname as author FROM issues INNER JOIN users ON issues.author = users.userid WHERE issueid = $1`, [rq.params.issueid],
+          (err, result) => {
+            rs.render('projects/issues/edit', { nav: 'projects', side: 'issues', user: rq.session.user, projectid: rq.params.projectid, issueid: rq.params.issueid, members: res.rows, result: result.rows[0], issues: data.rows });
+          })
+      })
+
     })
   })
 
-  router.post('/edit/:projectid/:userid', (rq, rs) => {
+  router.post('/edit/:projectid/:issueid', (rq, rs) => {
     let data = rq.body;
-    db.query(`UPDATE members SET role = $1 WHERE projectid = $2 AND userid = $3 RETURNING *`,
-      [
-        data.role,
-        rq.params.projectid,
-        rq.params.userid
-      ], (err, res) => {
-        rs.status(201);
-        rs.redirect(`/projects/members/${rq.params.projectid}`)
-      })
+    let files = [];
+    if (data.previousFile) {
+      if (Array.isArray(data.previousFile)) {
+        data.previousFile.forEach((f) => {
+          files.push(f);
+        })
+      } else {
+        files.push(data.previousFile)
+      }
+    }
+    if (data.deletedFile) {
+      if (Array.isArray(data.deletedFile)) {
+        data.deletedFile.forEach((f) => {
+          try {
+            fs.unlinkSync(f.path);
+          } catch (error) {
+            console.error('file not found');
+          }
+        })
+      } else {
+        try {
+          fs.unlinkSync(data.deletedFile.path);
+        } catch (error) {
+          console.error('file not found');
+        }
+      }
+    }
+    let promiseArray = [];
+    if (rq.files !== null) {
+      if (Array.isArray(rq.files.files)) {
+        rq.files.files.forEach((f) => {
+          let filename = `${Date.now()}${f.name}`
+          let fileuri = path.join(dirname, 'public/files', filename)
+          files.push({ name: f.name, type: f.mimetype, path: `/files/${filename}` })
+          promiseArray.push(f.mv(fileuri))
+        })
+      } else {
+        let f = rq.files.files
+        let filename = `${Date.now()}${f.name}`
+        let fileuri = path.join(dirname, 'public/files', filename)
+        files.push({ name: f.name, type: f.mimetype, path: `/files/${filename}` })
+        promiseArray.push(f.mv(fileuri))
+      }
+    }
+    Promise.all(promiseArray).then(() => {
+      db.query(`UPDATE issues SET tracker = $1, subject = $2, description = $3,
+       status = $4, priority = $5, assignee = $6, startdate = $7, duedate = $8, 
+       estimatedtime = $9, spenttime = $10, targetversion = $11,
+         updateddate = $12, closeddate = $13, parenttask = $14, done = $15, 
+        files = $16
+        WHERE issueid = $17
+       RETURNING *;`,
+        [
+          data.tracker, data.subject || null, data.description || null, data.status, data.priority, data.assignee || null, data.startdate, data.duedate || null, data.estimatedtime, data.spenttime || null, data.targetversion || null, new Date(), data.closeddate || null, data.parenttask || null, data.done || null,
+          files || null,
+          rq.params.issueid
+        ],
+        (err, res) => {
+          rs.redirect(`/projects/issues/${rq.params.projectid}`)
+          rs.status(201);
+        })
+    })
   })
 
 
