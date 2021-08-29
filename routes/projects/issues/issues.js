@@ -217,68 +217,75 @@ module.exports = function (dirname) {
   })
 
   router.post('/edit/:projectid/:issueid', (rq, rs) => {
-    let data = rq.body;
-    let files = [];
-    if (data.previousFile) {
-      if (Array.isArray(data.previousFile)) {
-        data.previousFile.forEach((f) => {
-          files.push(f);
-        })
+    db.query(`SELECT status FROM issues WHERE issueid = $1`, [rq.params.issueid], (err, res) => {
+      if (res.rows[0].status = 'closed') {
+        return rs.redirect(`/projects/issues/${rq.params.projectid}`);
       } else {
-        files.push(data.previousFile)
-      }
-    }
-    if (data.deletedFile) {
-      if (Array.isArray(data.deletedFile)) {
-        data.deletedFile.forEach((f) => {
-          try {
-            fs.unlinkSync(f.path);
-          } catch (error) {
-            console.error('file not found');
+        let data = rq.body;
+        let files = [];
+        if (data.previousFile) {
+          if (Array.isArray(data.previousFile)) {
+            data.previousFile.forEach((f) => {
+              files.push(f);
+            })
+          } else {
+            files.push(data.previousFile)
           }
-        })
-      } else {
-        try {
-          fs.unlinkSync(data.deletedFile.path);
-        } catch (error) {
-          console.error('file not found');
         }
-      }
-    }
-    let promiseArray = [];
-    if (rq.files !== null) {
-      if (Array.isArray(rq.files.files)) {
-        rq.files.files.forEach((f) => {
-          let filename = `${Date.now()}${f.name}`
-          let fileuri = path.join(dirname, 'public/files', filename)
-          files.push({ name: f.name, type: f.mimetype, path: `/files/${filename}` })
-          promiseArray.push(f.mv(fileuri))
+        if (data.deletedFile) {
+          if (Array.isArray(data.deletedFile)) {
+            data.deletedFile.forEach((f) => {
+              try {
+                fs.unlinkSync(f.path);
+              } catch (error) {
+                console.error('file not found');
+              }
+            })
+          } else {
+            try {
+              fs.unlinkSync(data.deletedFile.path);
+            } catch (error) {
+              console.error('file not found');
+            }
+          }
+        }
+        let promiseArray = [];
+        if (rq.files !== null) {
+          if (Array.isArray(rq.files.files)) {
+            rq.files.files.forEach((f) => {
+              let filename = `${Date.now()}${f.name}`
+              let fileuri = path.join(dirname, 'public/files', filename)
+              files.push({ name: f.name, type: f.mimetype, path: `/files/${filename}` })
+              promiseArray.push(f.mv(fileuri))
+            })
+          } else {
+            let f = rq.files.files
+            let filename = `${Date.now()}${f.name}`
+            let fileuri = path.join(dirname, 'public/files', filename)
+            files.push({ name: f.name, type: f.mimetype, path: `/files/${filename}` })
+            promiseArray.push(f.mv(fileuri))
+          }
+        }
+        Promise.all(promiseArray).then(() => {
+          db.query(`UPDATE issues SET tracker = $1, subject = $2, description = $3,
+           status = $4, priority = $5, assignee = $6, startdate = $7, duedate = $8, 
+           estimatedtime = $9, spenttime = $10, targetversion = $11,
+             updateddate = $12, closeddate = $13, parenttask = $14, done = $15, 
+            files = $16
+            WHERE issueid = $17
+           RETURNING *;`,
+            [
+              data.tracker, data.subject || null, data.description || null, data.status, data.priority, data.assignee || null, data.startdate, data.duedate || null, data.estimatedtime, data.spenttime || null, data.targetversion || null, new Date(), data.closeddate || null, data.parenttask || null, data.done || null,
+              files || null,
+              rq.params.issueid
+            ],
+            (err, res) => {
+              rs.redirect(`/projects/issues/${rq.params.projectid}`)
+              rs.status(201);
+            })
         })
-      } else {
-        let f = rq.files.files
-        let filename = `${Date.now()}${f.name}`
-        let fileuri = path.join(dirname, 'public/files', filename)
-        files.push({ name: f.name, type: f.mimetype, path: `/files/${filename}` })
-        promiseArray.push(f.mv(fileuri))
+
       }
-    }
-    Promise.all(promiseArray).then(() => {
-      db.query(`UPDATE issues SET tracker = $1, subject = $2, description = $3,
-       status = $4, priority = $5, assignee = $6, startdate = $7, duedate = $8, 
-       estimatedtime = $9, spenttime = $10, targetversion = $11,
-         updateddate = $12, closeddate = $13, parenttask = $14, done = $15, 
-        files = $16
-        WHERE issueid = $17
-       RETURNING *;`,
-        [
-          data.tracker, data.subject || null, data.description || null, data.status, data.priority, data.assignee || null, data.startdate, data.duedate || null, data.estimatedtime, data.spenttime || null, data.targetversion || null, new Date(), data.closeddate || null, data.parenttask || null, data.done || null,
-          files || null,
-          rq.params.issueid
-        ],
-        (err, res) => {
-          rs.redirect(`/projects/issues/${rq.params.projectid}`)
-          rs.status(201);
-        })
     })
   })
 

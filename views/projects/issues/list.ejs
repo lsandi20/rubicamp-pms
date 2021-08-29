@@ -511,10 +511,16 @@
             option.closeddate ||
             option.parenttask ||
             option.done ? '' : 'hidden' %>>
+              <% if (el.status === 'closed') { %>
+              <div>
+                <a href="/projects/issues/edit/<%=projectid%>/<%= el.issueid %>" class="btn btn-secondary">View</a>
+              </div>
+              <% } else { %>
               <div>
                 <a href="/projects/issues/edit/<%=projectid%>/<%= el.issueid %>" class="btn btn-success">Edit</a>
                 <a href="/projects/issues/delete/<%=projectid%>/<%= el.issueid %>" class="btn btn-danger">Delete</a>
               </div>
+              <% } %>
             </td>
           </tr>
           <% }) %>

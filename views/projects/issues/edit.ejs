@@ -3,7 +3,7 @@
 <div class="d-flex vh-100 ">
   <%- include('../../partials/sidebar'); %>
   <div class="px-3 py-3 vw-100">
-    <h2>New Issue</h2>
+    <h2><%= result.status === 'closed' ? 'Issue' : 'Edit Issue' %></h2>
     <hr>
     <div class="card mb-5">
       <div class="card-body">
@@ -18,17 +18,20 @@
                 <div class="container">
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="tracker" value="bug"
-                      <%= result.tracker === 'bug' ? 'checked' : '' %>>
+                      <%= result.tracker === 'bug' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="bug">Bug</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="tracker" value="feature"
-                      <%= result.tracker === 'feature' ? 'checked' : '' %>>
+                      <%= result.tracker === 'feature' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="feature">Feature</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="tracker" value="support"
-                      <%= result.tracker === 'support' ? 'checked' : '' %>>
+                      <%= result.tracker === 'support' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="support">Support</label>
                   </div>
                 </div>
@@ -39,7 +42,7 @@
                 </div>
                 <div class="container">
                   <input class="form-control" type="text" name="subject" placeholder="Subject" required
-                    value="<%= result.subject %>">
+                    value="<%= result.subject %>" <%= result.status === 'closed' ? 'disabled' : '' %>>
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -47,8 +50,8 @@
                   <label class="form-check-label" for="description">Description</label>
                 </div>
                 <div class="container">
-                  <textarea class="form-control" name="description"
-                    placeholder="Description"><%= result.description %></textarea>
+                  <textarea class="form-control" name="description" placeholder="Description"
+                    <%= result.status === 'closed' ? 'disabled' : '' %>><%= result.description %></textarea>
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -58,32 +61,38 @@
                 <div class="container">
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="status" value="new"
-                      <%= result.status === 'new' ? 'checked' : '' %>>
+                      <%= result.status === 'new' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="new">New</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="status" value="in progress"
-                      <%= result.status === 'in progress' ? 'checked' : '' %>>
+                      <%= result.status === 'in progress' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="in progress">In Progress</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="status" value="resolved"
-                      <%= result.status === 'resolved' ? 'checked' : '' %>>
+                      <%= result.status === 'resolved' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="resolved">Resolved</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="status" value="feedback"
-                      <%= result.status === 'feedback' ? 'checked' : '' %>>
+                      <%= result.status === 'feedback' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="feedback">Feedback</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="status" value="closed"
-                      <%= result.status === 'closed' ? 'checked' : '' %>>
+                      <%= result.status === 'closed' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="closed">Closed</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="status" value="rejected"
-                      <%= result.status === 'rejected' ? 'checked' : '' %>>
+                      <%= result.status === 'rejected' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="rejected">Rejected</label>
                   </div>
                 </div>
@@ -95,22 +104,26 @@
                 <div class="container">
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="priority" value="normal"
-                      <%= result.priority === 'normal' ? 'checked' : '' %>>
+                      <%= result.priority === 'normal' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="normal">Normal</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="priority" value="high"
-                      <%= result.priority === 'high' ? 'checked' : '' %>>
+                      <%= result.priority === 'high' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="high">High</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="priority" value="urgent"
-                      <%= result.priority === 'urgent' ? 'checked' : '' %>>
+                      <%= result.priority === 'urgent' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="urgent">Urgent</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="radio" name="priority" value="immediate"
-                      <%= result.priority === 'immediate' ? 'checked' : '' %>>
+                      <%= result.priority === 'immediate' ? 'checked' : '' %>
+                      <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <label class="form-check-label" for="immediate">Immediate</label>
                   </div>
                 </div>
@@ -120,7 +133,7 @@
                   <label class="form-check-label" for="assignee">Assignee</label>
                 </div>
                 <div class="container">
-                  <select class="form-control" name="assignee">
+                  <select class="form-control" name="assignee" <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <option disabled selected> Choose the assignee ...</option>
                     <% members.forEach( (el) => { %>
                     <option value="<%= el.userid %>" <%= result.assignee === el.userid ? 'selected' : ''%>>
@@ -136,7 +149,7 @@
                 </div>
                 <div class="container">
                   <input class="form-control" type="date" name="startdate" placeholder="Start Date"
-                    value="<%= result.startdate || '' %>" required>
+                    value="<%= result.startdate || '' %>" required <%= result.status === 'closed' ? 'disabled' : '' %>>
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -145,7 +158,8 @@
                 </div>
                 <div class="container">
                   <input class="form-control" type="date" name="duedate" placeholder="Due Date"
-                    value="<%= result.duedate !== null ? result.duedate : '' %>">
+                    value="<%= result.duedate !== null ? result.duedate : '' %>"
+                    <%= result.status === 'closed' ? 'disabled' : '' %>>
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -154,7 +168,8 @@
                 </div>
                 <div class="container">
                   <input class="form-control" type="number" step="any" name="estimatedtime" placeholder="Estimated Time"
-                    value="<%= result.estimatedtime !== null ? result.estimatedtime : '' %>" required>
+                    value="<%= result.estimatedtime !== null ? result.estimatedtime : '' %>" required
+                    <%= result.status === 'closed' ? 'disabled' : '' %>>
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -163,7 +178,8 @@
                 </div>
                 <div class="container">
                   <input class="form-control" type="number" step="any" name="spenttime" placeholder="Spent Time"
-                    value="<%= result.spenttime !== null ? result.spenttime : '' %>">
+                    value="<%= result.spenttime !== null ? result.spenttime : '' %>"
+                    <%= result.status === 'closed' ? 'disabled' : '' %>>
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -172,7 +188,7 @@
                 </div>
                 <div class="container">
                   <input class="form-control" type="text" name="targetversion" placeholder="Target Version"
-                    value="<%= result.targetversion  %>">
+                    value="<%= result.targetversion  %>" <%= result.status === 'closed' ? 'disabled' : '' %>>
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -217,7 +233,7 @@
                   <label class="form-check-label" for="parenttask">Parent Task</label>
                 </div>
                 <div class="container">
-                  <select class="form-control" name="parenttask">
+                  <select class="form-control" name="parenttask" <%= result.status === 'closed' ? 'disabled' : '' %>>
                     <option disabled selected> Choose the Parent Task ...</option>
                     <% issues.forEach( (el) => { %>
                     <% if (el.issueid !== parseInt(issueid)) { %>
@@ -235,7 +251,7 @@
                 </div>
                 <div class="container">
                   <input class="form-control" type="number" name="done" placeholder="%Done"
-                    value="<%= result.done || '' %>">
+                    value="<%= result.done || '' %>" <%= result.status === 'closed' ? 'disabled' : '' %>>
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -252,18 +268,24 @@
                     <%} %>
                     <div>
                       <a href="<%= `${f.path}` %>"><%= f.name %></a>
-                      <button class="btn btn-outline-danger rmfile ms-3" onclick="removePreviousFile(event)">-</button>
+                      <button class="btn btn-outline-danger rmfile ms-3" onclick="removePreviousFile(event)"
+                        <%= result.status === 'closed' ? 'hidden' : '' %>>-</button>
                     </div>
                   </div>
                   <%  }) %>
                   <% } %>
                   <div id="fileuploader" class="mt-3">
-                    <button class="btn btn-outline-primary" onclick="addFile(event)">+</button>
+                    <button class="btn btn-outline-primary" onclick="addFile(event)"
+                      <%= result.status === 'closed' ? 'hidden' : '' %>>+</button>
                   </div>
                 </div>
               </div>
             </div>
+            <% if (result.status !== 'closed') {%>
             <button id="submitfillform" class="btn btn-primary" type="submit">Save</button>
+            <% } else { %>
+            <a class="btn btn-secondary" href="<%= `/projects/issues/${projectid}` %>">Back</a>
+            <% } %>
         </div>
         </form>
       </div>
