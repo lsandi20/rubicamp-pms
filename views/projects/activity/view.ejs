@@ -1,0 +1,50 @@
+<%- include('../../partials/header'); %>
+<%- include('../../partials/topbar'); %>
+<div class="d-flex vh-100 ">
+  <%- include('../../partials/sidebar'); %>
+  <div class="px-3 py-3 vw-100">
+    <h2>Activity</h2>
+    <hr>
+    <div class="card">
+      <div class="card-body">
+        <div>Activity</div>
+        <% if (activity) { %>
+        <div> From <%= activity[0].date %> to <%= activity[activity.length-1].date %></div>
+        <% let today = new Date(); %>
+        <% let header = false; %>
+        <% for (i = 0; i < activity.length; i++) { %>
+        <%  if (!(header)) { %>
+        <% if ((activity[i].time.getDate() === today.getDate()) && (activity[i].time.getMonth() === today.getMonth()) && (activity[i].time.getFullYear() === today.getFullYear())) { %>
+        <div>Today</div>
+        <ul>
+          <% } else { %>
+          <div><%= activity[i].date %></div>
+          <ul>
+            <% } %>
+            <% if(activity[i+1]) { %>
+            <% if ((activity[i].time.getDate() === activity[i+1].time.getDate()) && (activity[i].time.getMonth() === activity[i+1].time.getMonth()) && (activity[i].time.getFullYear() === activity[i+1].time.getFullYear())) { %>
+            <% header = true %>
+            <li>
+              <%= `${activity[i].hour} ${activity[i].title}: ${activity[i].description}, author: ${activity[i].author}` %>
+            </li>
+            <%} else { %>
+            <% header = false %>
+            <li>
+              <%= `${activity[i].hour} ${activity[i].title}: ${activity[i].description}, author: ${activity[i].author}` %>
+            </li>
+          </ul>
+          <%} %>
+          <%}  else { %>
+          <li>
+            <%= `${activity[i].hour} ${activity[i].title}: ${activity[i].description}, author: ${activity[i].author}` %>
+          </li>
+        </ul>
+        <% } %>
+        <%} %>
+        <% }%>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../../partials/footer'); %>

@@ -180,7 +180,7 @@ module.exports = function (dirname) {
       }
     }
     Promise.all(promiseArray).then(() => {
-      db.query(`INSERT INTO issues(projectid, tracker, subject, description, status, priority, assignee, startdate, duedate, estimatedtime, author, createddate, updateddate, done, files) values 
+      db.query(`INSERT INTO issues(projectid, tracker, subject, description, status, priority, assignee, startdate, duedate, estimatedtime, author, createddate, updateddate, done, files) VALUES
         ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15) RETURNING *;`,
         [
           rq.params.projectid,
@@ -258,7 +258,7 @@ module.exports = function (dirname) {
       if (err) {
         return rs.status(500).send(err);
       }
-      if (res.rows[0].status = 'closed') {
+      if (res.rows[0].status === 'closed') {
         return rs.redirect(`/projects/issues/${rq.params.projectid}`);
       } else {
         let data = rq.body;
@@ -307,6 +307,7 @@ module.exports = function (dirname) {
           }
         }
         Promise.all(promiseArray).then(() => {
+          let updateddate = new Date();
           db.query(`UPDATE issues SET tracker = $1, subject = $2, description = $3,
            status = $4, priority = $5, assignee = $6, startdate = $7, duedate = $8, 
            estimatedtime = $9, spenttime = $10, targetversion = $11,
@@ -315,7 +316,7 @@ module.exports = function (dirname) {
             WHERE issueid = $17
            RETURNING *;`,
             [
-              data.tracker, data.subject || null, data.description || null, data.status, data.priority, data.assignee || null, data.startdate, data.duedate || null, data.estimatedtime, data.spenttime || null, data.targetversion || null, new Date(), data.closeddate || null, data.parenttask || null, data.done || null,
+              data.tracker, data.subject || null, data.description || null, data.status, data.priority, data.assignee || null, data.startdate, data.duedate || null, data.estimatedtime, data.spenttime || null, data.targetversion || null, updateddate, data.closeddate || null, data.parenttask || null, data.done || null,
               files || null,
               rq.params.issueid
             ],
@@ -323,8 +324,19 @@ module.exports = function (dirname) {
               if (err) {
                 return rs.status(500).send(err);
               }
-              rs.redirect(`/projects/issues/${rq.params.projectid}`)
-              rs.status(201);
+              db.query('INSERT INTO activity(projectid, time, title, description, author) VALUES ($1, $2, $3, $4, $5)', [
+                rq.params.projectid,
+                new Date(),
+                data.subject,
+                data.description || '',
+                rq.session.user.userid
+              ], (err, res) => {
+                if (err) {
+                  return rs.status(500).send(err);
+                }
+                rs.redirect(`/projects/issues/${rq.params.projectid}`)
+                rs.status(201);
+              })
             })
         }).catch(err => {
           if (err) {

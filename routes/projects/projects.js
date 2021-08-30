@@ -296,6 +296,27 @@ module.exports = function (dirname) {
       })
   });
 
+  router.get('/activity/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
+    db.query(`SELECT p.name, array_agg(u.firstname || ' ' || u.lastname) AS members FROM projects p LEFT JOIN members m USING(projectid) LEFT JOIN users u USING(userid) WHERE p.projectid = $1 GROUP BY p.name`,
+      [rq.params.projectid],
+      (err, res) => {
+        if (err) {
+          return rs.status(500).send(err);
+        }
+        let project = res.rows[0];
+        db.query(`SELECT a.activityid, a.title, a.description, a.projectid, a.time, u.firstname as author, TO_CHAR (a.time, 'HH24:MI') AS hour, TO_CHAR (a.time, 'DD/MM/YYYY') AS date  FROM activity a INNER JOIN users u ON a.author = u.userid 
+        WHERE projectid = $1 GROUP BY a.time, a.activityid, u.userid`,
+          [rq.params.projectid],
+          (err, res) => {
+            if (err) {
+              return rs.status(500).send(err);
+            }
+            let activity = res.rows;
+            rs.render('projects/activity/view', { nav: 'projects', side: 'activity', projectid: rq.params.projectid, user: rq.session.user, project, activity });
+          })
+      })
+  });
+
   router.use('/members', membersRouter);
   router.use('/issues', issuesRouter);
 
