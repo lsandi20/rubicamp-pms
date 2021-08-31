@@ -115,7 +115,7 @@ router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
 
 });
 
-router.post('/option', (rq, rs) => {
+router.post('/option', helpers.isLoggedIn, (rq, rs) => {
   if (rq.session.user.role !== 'admin') {
     return rs.status(401).send('Unauthorized');
   }
@@ -166,7 +166,7 @@ router.get('/edit/:userid', helpers.isLoggedIn, function (req, rs, next) {
     })
 });
 
-router.post('/', (rq, rs) => {
+router.post('/', helpers.isLoggedIn, (rq, rs) => {
   if (rq.session.user.role !== 'admin') {
     return rs.status(401).send('Unauthorized');
   }
@@ -189,7 +189,7 @@ router.post('/', (rq, rs) => {
 })
 
 
-router.post('/edit/:userid', function (req, res, next) {
+router.post('/edit/:userid', helpers.isLoggedIn, function (req, res, next) {
   if (req.session.user.role !== 'admin') {
     return rs.status(401).send('Unauthorized');
   }
@@ -228,7 +228,7 @@ router.post('/edit/:userid', function (req, res, next) {
   }
 })
 
-router.get('/delete/:userid', (rq, rs) => {
+router.get('/delete/:userid', helpers.isLoggedIn, (rq, rs) => {
   if (rq.session.user.role !== 'admin') {
     return rs.status(401).send('Unauthorized');
   }

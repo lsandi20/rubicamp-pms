@@ -93,7 +93,7 @@ router.get('/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
 
 
 
-router.post('/option/:projectid', (rq, rs) => {
+router.post('/option/:projectid', helpers.isLoggedIn, (rq, rs) => {
   let data = rq.body;
   let userid = rq.session.user.userid;
   let option = []
@@ -123,7 +123,7 @@ router.get('/:projectid/add', helpers.isLoggedIn, (rq, rs) => {
 })
 
 
-router.post('/:projectid', (rq, rs) => {
+router.post('/:projectid', helpers.isLoggedIn, (rq, rs) => {
   db.query(`INSERT INTO members(projectid, userid, role) values 
       ($1, $2, $3) RETURNING *;`,
     [
@@ -140,7 +140,7 @@ router.post('/:projectid', (rq, rs) => {
     })
 })
 
-router.get('/delete/:projectid/:userid', (rq, rs) => {
+router.get('/delete/:projectid/:userid', helpers.isLoggedIn, (rq, rs) => {
   db.query(`DELETE FROM members WHERE userid = $1 AND projectid = $2`,
     [
       rq.params.userid,
@@ -163,7 +163,7 @@ router.get('/edit/:projectid/:userid', helpers.isLoggedIn, (rq, rs) => {
   })
 })
 
-router.post('/edit/:projectid/:userid', (rq, rs) => {
+router.post('/edit/:projectid/:userid', helpers.isLoggedIn, (rq, rs) => {
   let data = rq.body;
   db.query(`UPDATE members SET role = $1 WHERE projectid = $2 AND userid = $3 RETURNING *`,
     [

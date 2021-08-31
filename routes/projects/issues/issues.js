@@ -114,7 +114,7 @@ module.exports = function (dirname) {
 
 
 
-  router.post('/option/:projectid', (rq, rs) => {
+  router.post('/option/:projectid', helpers.isLoggedIn, (rq, rs) => {
     let data = rq.body;
     let userid = rq.session.user.userid;
     let option = []
@@ -159,7 +159,7 @@ module.exports = function (dirname) {
   })
 
 
-  router.post('/:projectid', (rq, rs) => {
+  router.post('/:projectid', helpers.isLoggedIn, (rq, rs) => {
     let data = rq.body;
     let files = [];
     let promiseArray = [];
@@ -202,7 +202,7 @@ module.exports = function (dirname) {
 
   })
 
-  router.get('/delete/:projectid/:issueid', (rq, rs) => {
+  router.get('/delete/:projectid/:issueid', helpers.isLoggedIn, (rq, rs) => {
     db.query(`SELECT files FROM issues WHERE issueid = $1`, [
       rq.params.issueid,
     ], (err, result) => {
@@ -253,7 +253,7 @@ module.exports = function (dirname) {
     })
   })
 
-  router.post('/edit/:projectid/:issueid', (rq, rs) => {
+  router.post('/edit/:projectid/:issueid', helpers.isLoggedIn, (rq, rs) => {
     db.query(`SELECT status FROM issues WHERE issueid = $1`, [rq.params.issueid], (err, res) => {
       if (err) {
         return rs.status(500).send(err);

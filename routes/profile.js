@@ -17,7 +17,7 @@ router.get('/', helpers.isLoggedIn, function (req, rs, next) {
     })
 });
 
-router.post('/', function (req, res, next) {
+router.post('/', helpers.isLoggedIn, function (req, res, next) {
   let data = req.body;
   if (data.password.length !== 0) {
     db.query(`UPDATE users SET password = $1, position = $2, fulltime = $3 WHERE userid = $4`, [

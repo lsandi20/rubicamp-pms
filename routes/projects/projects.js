@@ -116,7 +116,7 @@ module.exports = function (dirname) {
     })
   })
 
-  router.post('/', (rq, rs) => {
+  router.post('/', helpers.isLoggedIn, (rq, rs) => {
     let data = rq.body;
     let members = [];
     if (Array.isArray(data.userid)) {
@@ -182,7 +182,7 @@ module.exports = function (dirname) {
     })
   })
 
-  router.post('/edit/:projectid', (rq, rs) => {
+  router.post('/edit/:projectid', helpers.isLoggedIn, (rq, rs) => {
     let data = rq.body;
     db.query(`UPDATE projects SET name = $1 WHERE projectid = $2 RETURNING *`,
       [
@@ -238,7 +238,7 @@ module.exports = function (dirname) {
       })
   })
 
-  router.get('/delete/:projectid', (rq, rs) => {
+  router.get('/delete/:projectid', helpers.isLoggedIn, (rq, rs) => {
     db.query(`DELETE FROM projects WHERE projectid = $1`,
       [
         rq.params.projectid
@@ -251,7 +251,7 @@ module.exports = function (dirname) {
       })
   })
 
-  router.post('/option', (rq, rs) => {
+  router.post('/option', helpers.isLoggedIn, (rq, rs) => {
     let data = rq.body;
     let userid = rq.session.user.userid;
     let option = []
