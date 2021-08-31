@@ -12,37 +12,42 @@
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkissueid">
+                <input type="checkbox" class="form-check-input" name="checkissueid"
+                  <%= check.issueid ? 'checked' : '' %>>
                 <label class="form-check-label" for="ID">ID</label>
               </div>
               <div class="container">
-                <input class="form-control" type="number" name="issueid" step="1" placeholder="ID">
+                <input class="form-control" type="number" name="issueid" step="1" placeholder="ID"
+                  value="<%= check.issueid ? check.issueid : '' %>">
               </div>
             </div>
           </div>
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checksubject">
+                <input type="checkbox" class="form-check-input" name="checksubject"
+                  <%= check.subject ? 'checked' : '' %>>
                 <label class="form-check-label" for="Subject">Subject</label>
               </div>
               <div class="container">
-                <input class="form-control" type="text" name="subject" placeholder="Subject">
+                <input class="form-control" type="text" name="subject" placeholder="Subject"
+                  value="<%= check.subject ? check.subject : '' %>">
               </div>
             </div>
           </div>
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checktracker">
+                <input type="checkbox" class="form-check-input" name="checktracker"
+                  <%= check.tracker ? 'checked' : '' %>>
                 <label class="form-check-label" for="tracker">Tracker</label>
               </div>
               <div class="container">
                 <select class="form-control" id="inputtracker" name="tracker">
                   <option disabled selected> Choose the Tracker ...</option>
-                  <option value="bug"> Bug</option>
-                  <option value="feature"> Feature</option>
-                  <option value="support"> Support</option>
+                  <option value="bug" <%= check.tracker === 'bug' ? 'selected' : '' %>> Bug</option>
+                  <option value="feature" <%= check.feature === 'feature' ? 'selected' : '' %>> Feature</option>
+                  <option value="support" <%= check.support === 'support' ? 'selected' : '' %>> Support</option>
                 </select>
               </div>
             </div>
@@ -50,18 +55,19 @@
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkstatus">
+                <input type="checkbox" class="form-check-input" name="checkstatus" <%= check.status ? 'checked' : '' %>>
                 <label class="form-check-label" for="status">Status</label>
               </div>
               <div class="container">
                 <select class="form-control" id="inputstatus" name="status">
                   <option disabled selected> Choose the Status ...</option>
-                  <option value="new">New</option>
-                  <option value="in progress">In Progress</option>
-                  <option value="resolved">Resolved</option>
-                  <option value="feedback">Feedback</option>
-                  <option value="closed">Closed</option>
-                  <option value="rejected">Rejected</option>
+                  <option value="new" <%= check.status === 'new' ? 'selected' : '' %>>New</option>
+                  <option value="in progress" <%= check.status === 'in progress' ? 'selected' : '' %>>In Progress
+                  </option>
+                  <option value="resolved" <%= check.status === 'resolved' ? 'selected' : '' %>>Resolved</option>
+                  <option value="feedback" <%= check.status === 'feedback' ? 'selected' : '' %>>Feedback</option>
+                  <option value="closed" <%= check.status === 'closed' ? 'selected' : '' %>>Closed</option>
+                  <option value="rejected" <%= check.status === 'rejected' ? 'selected' : '' %>>Rejected</option>
                 </select>
               </div>
             </div>
@@ -69,16 +75,17 @@
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkpriority">
+                <input type="checkbox" class="form-check-input" name="checkpriority"
+                  <%= check.priority ? 'checked' : '' %>>
                 <label class="form-check-label" for="status">Priority</label>
               </div>
               <div class="container">
                 <select class="form-control" id="inputstatus" name="priority">
                   <option disabled selected> Choose the Priority ...</option>
-                  <option value="normal">Normal</option>
-                  <option value="high">High</option>
-                  <option value="urgent">Urgent</option>
-                  <option value="immediate">Immediate</option>
+                  <option value="normal" <%= check.priority === 'normal' ? 'selected' : '' %>>Normal</option>
+                  <option value="high" <%= check.priority === 'high' ? 'selected' : '' %>>High</option>
+                  <option value="urgent" <%= check.priority === 'urgent' ? 'selected' : '' %>>Urgent</option>
+                  <option value="immediate" <%= check.priority === 'immediate' ? 'selected' : '' %>>Immediate</option>
                 </select>
               </div>
             </div>
@@ -86,14 +93,16 @@
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkassignee">
+                <input type="checkbox" class="form-check-input" name="checkassignee"
+                  <%= check.assignee ? 'checked' : '' %>>
                 <label class="form-check-label" for="Assignee">Assignee</label>
               </div>
               <div class="container">
                 <select class="form-control" id="inputMember" name="assignee">
                   <option disabled selected> Choose the assignee ...</option>
                   <% members.forEach( (el) => { %>
-                  <option value="<%= el.firstname %>"><%= el.firstname %></option>
+                  <option <%= check.assignee === el.firstname ? 'selected' : '' %> value="<%= el.firstname %>">
+                    <%= el.firstname %></option>
                   <%  }) %>
                 </select>
               </div>

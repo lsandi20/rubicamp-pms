@@ -11,36 +11,40 @@
         <div class="form-check">
           <div class="d-flex flex-row mb-3">
             <div class="container w-25">
-              <input type="checkbox" class="form-check-input" name="checkprojectid">
+              <input type="checkbox" class="form-check-input" name="checkprojectid"
+                <%= check.projectid ? 'checked' : '' %>>
               <label class="form-check-label" for="ID">ID</label>
             </div>
             <div class="container">
-              <input class="form-control" type="number" name="projectid" step="1" placeholder="ID">
+              <input class="form-control" type="number" name="projectid" step="1" placeholder="ID"
+                value="<%= check.projectid ? check.projectid : '' %>">
             </div>
           </div>
         </div>
         <div class="form-check">
           <div class="d-flex flex-row mb-3">
             <div class="container w-25">
-              <input type="checkbox" class="form-check-input" name="checkname">
+              <input type="checkbox" class="form-check-input" name="checkname" <%= check.name ? 'checked' : '' %>>
               <label class="form-check-label" for="Name">Name</label>
             </div>
             <div class="container">
-              <input class="form-control" type="text" name="name" placeholder="Name">
+              <input class="form-control" type="text" name="name" placeholder="Name"
+                value="<%= check.name ? check.name : '' %>">
             </div>
           </div>
         </div>
         <div class="form-check">
           <div class="d-flex flex-row mb-3">
             <div class="container w-25">
-              <input type="checkbox" class="form-check-input" name="checkmember">
+              <input type="checkbox" class="form-check-input" name="checkmember" <%= check.member ? 'checked' : '' %>>
               <label class="form-check-label" for="Member">Member</label>
             </div>
             <div class="container">
               <select class="form-control" id="inputMember" name="member">
                 <option disabled selected> Choose the member ...</option>
                 <% members.forEach( (el) => { %>
-                <option value="<%= el.firstname %>"><%= el.firstname %></option>
+                <option value="<%= el.firstname %>" <%= check.member === el.firstname ? 'selected' : '' %>>
+                  <%= el.firstname %></option>
                 <%  }) %>
               </select>
             </div>

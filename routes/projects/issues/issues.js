@@ -34,12 +34,20 @@ module.exports = function (dirname) {
       url = ''
     }
     let query = {
-      issueid: rq.query.checkissueid ? parseInt(rq.query.issueid) : null,
+      issueid: rq.query.checkissueid && rq.query.issueid ? parseInt(rq.query.issueid) : null,
       subject: rq.query.checksubject ? `%${rq.query.subject.toLowerCase()}%` : null,
       tracker: rq.query.checktracker ? `${rq.query.tracker}` : null,
       status: rq.query.checkstatus ? `${rq.query.status}` : null,
       priority: rq.query.checkpriority ? `${rq.query.priority}` : null,
-      assignee: rq.query.checkassignee ? `%${rq.query.assignee.toLowerCase()}%` : null,
+      assignee: rq.query.checkassignee && rq.query.assignee ? `%${rq.query.assignee.toLowerCase()}%` : null,
+    }
+    let check = {
+      issueid: rq.query.checkissueid ? rq.query.issueid : '',
+      subject: rq.query.checksubject ? rq.query.subject : '',
+      tracker: rq.query.checktracker ? rq.query.tracker : '',
+      status: rq.query.checkstatus ? rq.query.status : '',
+      priority: rq.query.checkpriority ? rq.query.priority : '',
+      assignee: rq.query.checkassignee ? rq.query.assignee : '',
     }
     for (q in query) {
       if (query[q] === null) {
@@ -104,7 +112,7 @@ module.exports = function (dirname) {
               page: parseInt(rq.query.page),
               total: res.rows[0] ? parseInt(res.rows[0].total) : 0
             }
-            rs.render('projects/issues/list', { nav: 'projects', side: 'issues', query: url, sort, projectid: rq.params.projectid, user: rq.session.user, result, option, members });
+            rs.render('projects/issues/list', { nav: 'projects', side: 'issues', query: url, sort, projectid: rq.params.projectid, user: rq.session.user, result, option, members, check });
             rs.status(200);
           })
         })

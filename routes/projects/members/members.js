@@ -31,9 +31,14 @@ router.get('/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
     url = ''
   }
   let query = {
-    userid: rq.query.checkuserid ? parseInt(rq.query.userid) : null,
-    firstname: rq.query.checkname ? `%${rq.query.firstname.toLowerCase()}%` : null,
+    userid: rq.query.checkuserid && rq.query.userid ? parseInt(rq.query.userid) : null,
+    firstname: rq.query.checkfirstname ? `%${rq.query.firstname.toLowerCase()}%` : null,
     position: rq.query.checkposition ? `${rq.query.position}` : null,
+  }
+  let check = {
+    userid: rq.query.checkuserid ? rq.query.userid : '',
+    firstname: rq.query.checkfirstname ? rq.query.firstname : '',
+    position: rq.query.checkposition ? rq.query.position : '',
   }
   for (q in query) {
     if (query[q] === null) {
@@ -84,7 +89,7 @@ router.get('/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
           page: parseInt(rq.query.page),
           total: res.rows[0] ? parseInt(res.rows[0].total) : 0
         }
-        rs.render('projects/members/list', { nav: 'projects', side: 'members', query: url, sort, projectid: rq.params.projectid, user: rq.session.user, result, option });
+        rs.render('projects/members/list', { nav: 'projects', side: 'members', query: url, sort, projectid: rq.params.projectid, user: rq.session.user, result, option, check });
         rs.status(200);
       })
     })

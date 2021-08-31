@@ -12,43 +12,49 @@
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-50">
-                <input type="checkbox" class="form-check-input" name="checkuserid">
+                <input type="checkbox" class="form-check-input" name="checkuserid" <%= check.userid ? 'checked' : '' %>>
                 <label class="form-check-label" for="ID">ID</label>
               </div>
               <div class="container">
-                <input class="form-control" type="number" name="userid" step="1" placeholder="ID">
+                <input class="form-control" type="number" name="userid" step="1" placeholder="ID"
+                  value="<%= check.userid ? check.userid : '' %>">
               </div>
             </div>
           </div>
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-50">
-                <input type="checkbox" class="form-check-input" name="checkname">
+                <input type="checkbox" class="form-check-input" name="checkfirstname"
+                  <%= check.firstname ? 'checked' : '' %>>
                 <label class="form-check-label" for="Name">Name</label>
               </div>
               <div class="container">
-                <input class="form-control" type="text" name="firstname" placeholder="Name">
+                <input class="form-control" type="text" name="firstname" placeholder="Name"
+                  value="<%= check.firstname ? check.firstname : '' %>"">
               </div>
             </div>
           </div>
-          <div class="form-check">
-            <div class="d-flex flex-row mb-3">
-              <div class="container w-50">
-                <input type="checkbox" class="form-check-input" name="checkposition">
-                <label class="form-check-label" for="position">Position</label>
+          <div class=" form-check">
+                <div class="d-flex flex-row mb-3">
+                  <div class="container w-50">
+                    <input type="checkbox" class="form-check-input" name="checkposition"
+                      <%= check.position ? 'checked' : '' %>>
+                    <label class="form-check-label" for="position">Position</label>
+                  </div>
+                  <div class="container">
+                    <select class="form-control" id="inputposition" name="position">
+                      <option disabled selected> Choose the Position ...</option>
+                      <option value="manager" <%= check.position === 'manager' ? 'selected' : '' %>> Manager</option>
+                      <option value="quality assurance" <%= check.position === 'quality assurance' ? 'selected' : '' %>>
+                        Quality Assurance</option>
+                      <option value="software developer"
+                        <%= check.position === 'software developer' ? 'selected' : '' %>> Software Developer</option>
+                    </select>
+                  </div>
+                </div>
               </div>
-              <div class="container">
-                <select class="form-control" id="inputposition" name="position">
-                  <option disabled selected> Choose the Position ...</option>
-                  <option value="manager"> Manager</option>
-                  <option value="quality assurance"> Quality Assurance</option>
-                  <option value="software developer"> Software Developer</option>
-                </select>
-              </div>
+              <button class="btn btn-primary" type="submit">Search</button>
             </div>
-          </div>
-          <button class="btn btn-primary" type="submit">Search</button>
-        </div>
       </form>
     </div>
     <h4>Options</h4>

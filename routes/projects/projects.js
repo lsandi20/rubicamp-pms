@@ -35,14 +35,14 @@ module.exports = function (dirname) {
       url = ''
     }
     let query = {
-      projectid: rq.query.checkprojectid ? parseInt(rq.query.projectid) : null,
+      projectid: rq.query.checkprojectid && rq.query.projectid ? parseInt(rq.query.projectid) : null,
       name: rq.query.checkname ? `%${rq.query.name.toLowerCase()}%` : null,
       member: rq.query.checkmember ? `%${rq.query.member}%` : null,
     }
     let check = {
-      projectid: rq.query.checkprojectid ? 'on' : null,
-      name: rq.query.checkname ? `on` : null,
-      member: rq.query.checkmember ? `on` : null,
+      projectid: rq.query.checkprojectid ? rq.query.projectid : '',
+      name: rq.query.checkname ? rq.query.name : '',
+      member: rq.query.checkmember ? rq.query.member : ''
     }
     for (q in query) {
       if (query[q] === null) {
@@ -98,7 +98,7 @@ module.exports = function (dirname) {
               page: parseInt(rq.query.page),
               total: res.rows[0] ? parseInt(res.rows[0].total) : 0
             }
-            rs.render('projects/list', { nav: 'projects', query: url, sort, user: rq.session.user, result, members, option });
+            rs.render('projects/list', { nav: 'projects', query: url, sort, user: rq.session.user, result, members, option, check });
             rs.status(200);
           })
         })

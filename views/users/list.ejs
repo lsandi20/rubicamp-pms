@@ -11,59 +11,68 @@
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkuserid">
+                <input type="checkbox" class="form-check-input" name="checkuserid" <%= check.userid ? 'checked' : '' %>>
                 <label class="form-check-label" for="ID">ID</label>
               </div>
               <div class="container">
-                <input class="form-control" type="number" name="userid" step="1" placeholder="ID">
+                <input class="form-control" type="number" name="userid" step="1" placeholder="ID"
+                  value="<%= check.userid ? check.userid : '' %>">
               </div>
             </div>
           </div>
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkemail">
+                <input type="checkbox" class="form-check-input" name="checkemail" <%= check.email ? 'checked' : '' %>>
                 <label class="form-check-label" for="email">Email</label>
               </div>
               <div class="container">
-                <input class="form-control" type="email" name="email" placeholder="Email">
+                <input class="form-control" type="email" name="email" placeholder="Email"
+                  value="<%= check.email ? check.email : '' %>">
               </div>
             </div>
           </div>
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkfirstname">
+                <input type="checkbox" class="form-check-input" name="checkfirstname"
+                  <%= check.firstname ? 'checked' : '' %>>
                 <label class="form-check-label" for="firstname">First Name</label>
               </div>
               <div class="container">
-                <input class="form-control" type="text" name="firstname" placeholder="First Name">
+                <input class="form-control" type="text" name="firstname" placeholder="First Name"
+                  value="<%= check.firstname ? check.firstname : '' %>">
               </div>
             </div>
           </div>
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checklastname">
+                <input type="checkbox" class="form-check-input" name="checklastname"
+                  <%= check.lastname ? 'checked' : '' %>>
                 <label class="form-check-label" for="lastname">Last Name</label>
               </div>
               <div class="container">
-                <input class="form-control" type="text" name="lastname" placeholder="Last Name">
+                <input class="form-control" type="text" name="lastname" placeholder="Last Name"
+                  value="<%= check.lastname ? check.lastname : '' %>">
               </div>
             </div>
           </div>
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkposition">
+                <input type="checkbox" class="form-check-input" name="checkposition"
+                  <%= check.position ? 'checked' : '' %>>
                 <label class="form-check-label" for="position">Position</label>
               </div>
               <div class="container">
                 <select class="form-control" id="inputposition" name="position">
                   <option disabled selected> Choose the Position ...</option>
-                  <option value="manager"> Manager</option>
-                  <option value="quality assurance"> Quality Assurance</option>
-                  <option value="software developer"> Software Developer</option>
+                  <option value="manager" <%= check.position === 'manager' ? 'selected' : '' %>> Manager</option>
+                  <option value="quality assurance" <%= check.position === 'quality assurance' ? 'selected' : '' %>>
+                    Quality Assurance</option>
+                  <option value="software developer" <%= check.position === 'software developer' ? 'selected' : '' %>>
+                    Software Developer</option>
                 </select>
               </div>
             </div>
@@ -71,14 +80,15 @@
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkfulltime">
+                <input type="checkbox" class="form-check-input" name="checkfulltime"
+                  <%= check.fulltime ? 'checked' : '' %>>
                 <label class="form-check-label" for="checkfulltime">Fulltime</label>
               </div>
               <div class="container">
                 <select class="form-control" id="inputposition" name="fulltime">
                   <option disabled selected> Choose the Fulltime ...</option>
-                  <option value="true">True</option>
-                  <option value="false">False</option>
+                  <option value="true" <%= check.fulltime ? 'selected' : '' %>>True</option>
+                  <option value="false" <%= check.fulltime ? '' : 'selected' %>>False</option>
                 </select>
               </div>
             </div>
@@ -86,14 +96,14 @@
           <div class="form-check">
             <div class="d-flex flex-row mb-3">
               <div class="container w-25">
-                <input type="checkbox" class="form-check-input" name="checkrole">
+                <input type="checkbox" class="form-check-input" name="checkrole" <%= check.role ? 'checked' : '' %>>
                 <label class="form-check-label" for="checkrole">Role</label>
               </div>
               <div class="container">
                 <select class="form-control" id="inputposition" name="role">
                   <option disabled selected> Choose the Role ...</option>
-                  <option value="admin"> Admin</option>
-                  <option value="user"> User</option>
+                  <option value="admin" <%= check.role === 'admin' ? 'selected' : '' %>> Admin</option>
+                  <option value="user" <%= check.user === 'user' ? 'selected' : '' %>> User</option>
                 </select>
               </div>
 
