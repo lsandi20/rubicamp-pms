@@ -29,9 +29,20 @@
           <label for="password">Password</label>
         </div>
         <button class="btn btn-primary w-100" type="submit">Sign in</button>
+        <% if (loginmessage.length > 0) { %>
+        <div class="alert alert-danger show" role="alert">
+          <%= loginmessage[0] %>
+        </div>
+        <% } %>
       </form>
     </div>
+  </div>
+  <script>
+    setTimeout(() => {
+      document.querySelector('.alert').classList.add('fade')
+      document.querySelector('.alert').hidden = true
+    }, 1000)
+  </script>
 </body>
-</div>
 
 </html>

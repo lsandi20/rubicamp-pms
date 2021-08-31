@@ -89,7 +89,7 @@ router.get('/:projectid', helpers.isLoggedIn, function (rq, rs, next) {
           page: parseInt(rq.query.page),
           total: res.rows[0] ? parseInt(res.rows[0].total) : 0
         }
-        rs.render('projects/members/list', { nav: 'projects', side: 'members', query: url, sort, projectid: rq.params.projectid, user: rq.session.user, result, option, check });
+        rs.render('projects/members/list', { nav: 'projects', side: 'members', query: url, sort, projectid: rq.params.projectid, user: rq.session.user, result, option, check, breadmessage: rq.flash('breadmessage') });
         rs.status(200);
       })
     })
@@ -140,6 +140,7 @@ router.post('/:projectid', helpers.isLoggedIn, (rq, rs) => {
       if (err) {
         return rs.status(500).send(err);
       }
+      rq.flash('breadmessage', 'Anggota berhasil ditambahkan')
       rs.redirect(`/projects/members/${rq.params.projectid}`)
       rs.status(201);
     })
@@ -155,6 +156,7 @@ router.get('/delete/:projectid/:userid', helpers.isLoggedIn, (rq, rs) => {
         return rs.status(500).send(err);
       }
       rs.status(200);
+      rq.flash('breadmessage', 'Anggota berhasil dihapus')
       rs.redirect(`/projects/members/${rq.params.projectid}`)
     })
 })
@@ -180,6 +182,7 @@ router.post('/edit/:projectid/:userid', helpers.isLoggedIn, (rq, rs) => {
         return rs.status(500).send(err);
       }
       rs.status(201);
+      rq.flash('breadmessage', 'Anggota berhasil diubah')
       rs.redirect(`/projects/members/${rq.params.projectid}`)
     })
 })

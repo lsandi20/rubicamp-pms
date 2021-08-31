@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var fileupload = require('express-fileupload');
+var flash = require('connect-flash')
 
 var indexRouter = require('./routes/index');
 var projectsRouter = require('./routes/projects/projects')(__dirname);
@@ -20,6 +21,8 @@ app.use(session({
   saveUninitialized: false,
   resave: false
 }))
+
+app.use(flash())
 
 app.use(fileupload());
 // view engine setup
@@ -47,7 +50,6 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
   // render the error page
   res.status(err.status || 500);
   res.render('error');

@@ -1,6 +1,11 @@
 <%- include('../partials/header'); %>
 
 <%- include('../partials/topbar'); %>
+<% if (breadmessage.length > 0) { %>
+<div class="alert alert-success show w-25 float-end" role="alert">
+  <%= breadmessage[0] %>
+</div>
+<% } %>
 <div class="px-3 py-3">
   <h2>Profile</h2>
   <hr>
@@ -68,5 +73,10 @@
   </form>
 </div>
 </div>
-
+<script>
+  setTimeout(() => {
+    document.querySelector('.alert').classList.add('fade')
+    document.querySelector('.alert').hidden = true
+  }, 1000)
+</script>
 <%- include('../partials/footer'); %>

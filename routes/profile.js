@@ -12,7 +12,7 @@ router.get('/', helpers.isLoggedIn, function (req, rs, next) {
       if (err) {
         return rs.status(500).send(err);
       }
-      rs.render('profile/form', { nav: 'profile', user: req.session.user, profile: res.rows[0] });
+      rs.render('profile/form', { nav: 'profile', user: req.session.user, profile: res.rows[0], breadmessage: req.flash('breadmessage') });
       rs.status(200);
     })
 });
@@ -27,6 +27,7 @@ router.post('/', helpers.isLoggedIn, function (req, res, next) {
       data.userid
     ], (err) => {
       if (err) {
+        req.flash('breadmessage', 'Profil berhasil diubah')
         return rs.status(500).send(err);
       }
       res.redirect('/profile')
@@ -40,6 +41,7 @@ router.post('/', helpers.isLoggedIn, function (req, res, next) {
       if (err) {
         return rs.status(500).send(err);
       }
+      req.flash('breadmessage', 'Profil berhasil diubah')
       res.redirect('/profile')
     })
   }

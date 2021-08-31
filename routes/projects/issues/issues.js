@@ -112,7 +112,7 @@ module.exports = function (dirname) {
               page: parseInt(rq.query.page),
               total: res.rows[0] ? parseInt(res.rows[0].total) : 0
             }
-            rs.render('projects/issues/list', { nav: 'projects', side: 'issues', query: url, sort, projectid: rq.params.projectid, user: rq.session.user, result, option, members, check });
+            rs.render('projects/issues/list', { nav: 'projects', side: 'issues', query: url, sort, projectid: rq.params.projectid, user: rq.session.user, result, option, members, check, breadmessage: rq.flash('breadmessage') });
             rs.status(200);
           })
         })
@@ -153,6 +153,7 @@ module.exports = function (dirname) {
         if (err) {
           return rs.status(500).send(err);
         }
+        rq.flash('breadmessage', 'Opsi berhasil disimpan')
         rs.redirect(`/projects/issues/${rq.params.projectid}`)
       })
   })
@@ -199,6 +200,7 @@ module.exports = function (dirname) {
           if (err) {
             return rs.status(500).send(err);
           }
+          rq.flash('breadmessage', 'Issue berhasil dibuat')
           rs.redirect(`/projects/issues/${rq.params.projectid}`)
           rs.status(201);
         })
@@ -234,6 +236,7 @@ module.exports = function (dirname) {
             })
           }
           rs.status(200);
+          rq.flash('breadmessage', 'Issue berhasil dihapus')
           rs.redirect(`/projects/issues/${rq.params.projectid}`)
         })
     })
@@ -342,6 +345,7 @@ module.exports = function (dirname) {
                 if (err) {
                   return rs.status(500).send(err);
                 }
+                rq.flash('breadmessage', 'Issue berhasil diubah')
                 rs.redirect(`/projects/issues/${rq.params.projectid}`)
                 rs.status(201);
               })

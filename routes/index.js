@@ -7,7 +7,7 @@ router.get('/', function (req, res, next) {
   if (req.session.user) {
     return res.redirect('/projects')
   }
-  res.render('login');
+  res.render('login', { loginmessage: req.flash('loginmessage') });
 });
 
 router.post('/auth', function (req, rs, next) {
@@ -17,6 +17,7 @@ router.post('/auth', function (req, rs, next) {
       return rs.status(500).send(err);
     }
     if (res.rows.length === 0) {
+      req.flash('loginmessage', 'User not found')
       return rs.redirect('/');
     }
     let data = res.rows[0];
@@ -24,6 +25,7 @@ router.post('/auth', function (req, rs, next) {
       req.session.user = data;
       rs.redirect('/projects')
     } else {
+      req.flash('loginmessage', 'Password not match')
       rs.redirect('/');
     }
   })

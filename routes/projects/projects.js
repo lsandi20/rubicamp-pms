@@ -98,7 +98,7 @@ module.exports = function (dirname) {
               page: parseInt(rq.query.page),
               total: res.rows[0] ? parseInt(res.rows[0].total) : 0
             }
-            rs.render('projects/list', { nav: 'projects', query: url, sort, user: rq.session.user, result, members, option, check });
+            rs.render('projects/list', { nav: 'projects', query: url, sort, user: rq.session.user, result, members, option, check, breadmessage: rq.flash('breadmessage') });
             rs.status(200);
           })
         })
@@ -160,6 +160,7 @@ module.exports = function (dirname) {
             if (err) {
               return rs.status(500).send(err);
             }
+            rq.flash('breadmessage', 'Projek berhasil ditambahkan')
             rs.redirect('/projects')
             rs.status(201);
           })
@@ -230,6 +231,7 @@ module.exports = function (dirname) {
               if (err) {
                 return rs.status(500).send(err);
               }
+              rq.flash('breadmessage', 'Projek berhasil diubah')
               rs.redirect('/projects')
               rs.status(201);
             })
@@ -239,6 +241,9 @@ module.exports = function (dirname) {
   })
 
   router.get('/delete/:projectid', helpers.isLoggedIn, (rq, rs) => {
+    if (rq.session.user.role !== 'admin') {
+      return rs.status(401).send('Unauthorized');
+    }
     db.query(`DELETE FROM projects WHERE projectid = $1`,
       [
         rq.params.projectid
@@ -247,6 +252,7 @@ module.exports = function (dirname) {
           return rs.status(500).send(err);
         }
         rs.status(200);
+        rq.flash('breadmessage', 'Projek berhasil dihapus')
         rs.redirect('/projects')
       })
   })
@@ -267,6 +273,7 @@ module.exports = function (dirname) {
         if (err) {
           return rs.status(500).send(err);
         }
+        rq.flash('breadmessage', 'Opsi berhasil disimpan')
         rs.redirect('/projects')
       })
   })

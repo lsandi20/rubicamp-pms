@@ -111,7 +111,7 @@ router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
           page: parseInt(rq.query.page),
           total: res.rows[0] ? parseInt(res.rows[0].total) : 0
         }
-        rs.render('users/list', { nav: 'users', query: url, sort, user: rq.session.user, result, option, check });
+        rs.render('users/list', { nav: 'users', query: url, sort, user: rq.session.user, result, option, check, breadmessage: rq.flash('breadmessage') });
         rs.status(200);
       })
     })
@@ -142,6 +142,7 @@ WHERE userid = $2`,
       if (err) {
         return rs.status(500).send(err);
       }
+      rq.flash('breadmessage', 'Opsi berhasil disimpan')
       rs.redirect('/users')
     })
 })
@@ -183,10 +184,13 @@ router.post('/', helpers.isLoggedIn, (rq, rs) => {
       data.firstname,
       data.lastname,
       data.position,
-      data.fulltime,
+      data.fulltime || false,
       data.role
     ], (err, res) => {
-
+      if (err) {
+        return rs.status(500).send(err);
+      }
+      rq.flash('breadmessage', 'User berhasil ditambahkan')
       rs.redirect('/users')
       rs.status(201);
     });
@@ -212,6 +216,7 @@ router.post('/edit/:userid', helpers.isLoggedIn, function (req, res, next) {
       if (err) {
         return rs.status(500).send(err);
       }
+      req.flash('breadmessage', 'User berhasil diubah')
       res.redirect('/users')
     })
   } else {
@@ -227,6 +232,7 @@ router.post('/edit/:userid', helpers.isLoggedIn, function (req, res, next) {
       if (err) {
         return rs.status(500).send(err);
       }
+      req.flash('breadmessage', 'User berhasil diubah')
       res.redirect('/users')
     })
   }
@@ -244,6 +250,7 @@ router.get('/delete/:userid', helpers.isLoggedIn, (rq, rs) => {
         return rs.status(500).send(err);
       }
       rs.status(200);
+      rq.flash('breadmessage', 'User berhasil dihapus')
       rs.redirect('/users')
     })
 })

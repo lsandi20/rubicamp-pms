@@ -2,6 +2,11 @@
 
 <%- include('../partials/topbar'); %>
 <div class="px-3 py-3">
+  <% if (breadmessage.length > 0) { %>
+  <div class="alert alert-success show w-25 float-end" role="alert">
+    <%= breadmessage[0] %>
+  </div>
+  <% } %>
   <h2>Projects</h2>
   <hr>
   <h4>Filters</h4>
@@ -142,7 +147,8 @@
           <td <%= option.projectid || option.name || option.members ? '' : 'hidden' %>>
             <div>
               <a href="/projects/edit/<%= el.projectid %>" class="btn btn-success">Edit</a>
-              <a href="/projects/delete/<%= el.projectid %>" class="btn btn-danger">Delete</a>
+              <a href="/projects/delete/<%= el.projectid %>" class="btn btn-danger"
+                <%= user.role !== 'admin' ? 'hidden' : '' %>>Delete</a>
             </div>
           </td>
         </tr>
@@ -176,5 +182,11 @@
     <a class="btn btn-primary" href="/projects/add">Add</a>
   </div>
 </div>
+<script>
+  setTimeout(() => {
+    document.querySelector('.alert').classList.add('fade')
+    document.querySelector('.alert').hidden = true
+  }, 1000)
+</script>
 
 <%- include('../partials/footer'); %>
