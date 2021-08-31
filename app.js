@@ -8,6 +8,7 @@ var fileupload = require('express-fileupload');
 var indexRouter = require('./routes/index');
 var projectsRouter = require('./routes/projects/projects')(__dirname);
 var profileRouter = require('./routes/profile');
+var usersRouter = require('./routes/users');
 
 require('dotenv').config();
 
@@ -34,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/projects', projectsRouter);
 app.use('/profile', profileRouter);
+app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -11,12 +11,13 @@
           <%= nav === 'projects' ? 'aria-current=page' : '' %> href="/projects">Projects</a>
         <a class="nav-link <%= nav === 'profile' ? 'active' : ''%>" <%= nav === 'profile' ? 'aria-current=page' : '' %>
           href="/profile">Profile</a>
-
+        <a class="nav-link <%= nav === 'users' ? 'active' : ''%>" <%= nav === 'users' ? 'aria-current=page' : '' %>
+          href="/users" <%= user.role === 'admin' ? '' : 'hidden'%>>Users</a>
       </div>
     </div>
   </div>
   <span class="navbar-text mx-3">
     <%= user.firstname %>
   </span>
-  <a href="/logout" class=" mx-3 btn btn-outline-success">Sign Out</a>
+  <a href="/logout" class=" mx-3 btn btn-outline-success" style="width:150px">Sign Out</a>
 </nav>

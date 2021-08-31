@@ -1,0 +1,312 @@
+<%- include('../partials/header'); %>
+<%- include('../partials/topbar'); %>
+<div class="d-flex ">
+  <div class="px-3 py-3 vw-100">
+    <h2>Users</h2>
+    <hr>
+    <h4>Filters</h4>
+    <div id="filterform" class="container">
+      <form action="/users" method="GET" id="browse">
+        <div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkuserid">
+                <label class="form-check-label" for="ID">ID</label>
+              </div>
+              <div class="container">
+                <input class="form-control" type="number" name="userid" step="1" placeholder="ID">
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkemail">
+                <label class="form-check-label" for="email">Email</label>
+              </div>
+              <div class="container">
+                <input class="form-control" type="email" name="email" placeholder="Email">
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkfirstname">
+                <label class="form-check-label" for="firstname">First Name</label>
+              </div>
+              <div class="container">
+                <input class="form-control" type="text" name="firstname" placeholder="First Name">
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checklastname">
+                <label class="form-check-label" for="lastname">Last Name</label>
+              </div>
+              <div class="container">
+                <input class="form-control" type="text" name="lastname" placeholder="Last Name">
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkposition">
+                <label class="form-check-label" for="position">Position</label>
+              </div>
+              <div class="container">
+                <select class="form-control" id="inputposition" name="position">
+                  <option disabled selected> Choose the Position ...</option>
+                  <option value="manager"> Manager</option>
+                  <option value="quality assurance"> Quality Assurance</option>
+                  <option value="software developer"> Software Developer</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkfulltime">
+                <label class="form-check-label" for="checkfulltime">Fulltime</label>
+              </div>
+              <div class="container">
+                <select class="form-control" id="inputposition" name="fulltime">
+                  <option disabled selected> Choose the Fulltime ...</option>
+                  <option value="true">True</option>
+                  <option value="false">False</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-check">
+            <div class="d-flex flex-row mb-3">
+              <div class="container w-25">
+                <input type="checkbox" class="form-check-input" name="checkrole">
+                <label class="form-check-label" for="checkrole">Role</label>
+              </div>
+              <div class="container">
+                <select class="form-control" id="inputposition" name="role">
+                  <option disabled selected> Choose the Role ...</option>
+                  <option value="admin"> Admin</option>
+                  <option value="user"> User</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
+          <button class="btn btn-primary" type="submit">Search</button>
+        </div>
+      </form>
+    </div>
+    <h4>Options</h4>
+    <div>
+      <form action="/users/option" method="POST">
+        <div class="d-flex">
+          <h6>Columns</h6>
+          <div class="row align-items-start">
+            <div class="col-md-auto">
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.userid ? 'checked' : '' %>
+                      name="optionuserid">
+                    <label class="form-check-label" for="ID">ID</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.email ? 'checked' : '' %>
+                      name="optionemail">
+                    <label class="form-check-label" for="Email">Email</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.firstname ? 'checked' : '' %>
+                      name="optionfirstname">
+                    <label class="form-check-label" for="First Name">First Name</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.lastname ? 'checked' : '' %>
+                      name="optionlastname">
+                    <label class="form-check-label" for="Last Name">Last Name</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-auto">
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.position ? 'checked' : '' %>
+                      name="optionposition">
+                    <label class="form-check-label" for="Position">Position</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.fulltime ? 'checked' : '' %>
+                      name="optionfulltime">
+                    <label class="form-check-label" for="Fulltime">Fulltime</label>
+                  </div>
+                </div>
+              </div>
+              <div class="form-check">
+                <div class="mb-3">
+                  <div class="container">
+                    <input type="checkbox" class="form-check-input" <%= option.role ? 'checked' : '' %>
+                      name="optionrole">
+                    <label class="form-check-label" for="Role">Role</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Apply</button>
+      </form>
+    </div>
+    <div class="container mt-3">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th <%= option.userid ? '' : 'hidden' %>>
+              <div>#</div>
+              <div>
+                <a href="<%= `/users/?${query}&sortp=userid&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'userid' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/users/?${query}&sortp=userid&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'userid' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.email ? '' : 'hidden' %>>
+              <div>Email</div>
+              <div>
+                <a href="<%= `/users/?${query}&sortp=email&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'email' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/users/?${query}&sortp=email&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'email' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.firstname ? '' : 'hidden' %>>
+              <div>First Name</div>
+              <div>
+                <a href="<%= `/users/?${query}&sortp=firstname&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'firstname' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/users/?${query}&sortp=firstname&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'firstname' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.lastname ? '' : 'hidden' %>>
+              <div>Last Name</div>
+              <div>
+                <a href="<%= `/users/?${query}&sortp=lastname&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'lastname' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/users/?${query}&sortp=lastname&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'lastname' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.position ? '' : 'hidden' %>>
+              <div>Position</div>
+              <div>
+                <a href="<%= `/users/?${query}&sortp=position&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'position' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/users/?${query}&sortp=position&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'position' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.fulltime ? '' : 'hidden' %>>
+              <div>Fulltime</div>
+              <div>
+                <a href="<%= `/users/?${query}&sortp=fulltime&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'fulltime' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/users/?${query}&sortp=fulltime&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'fulltime' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th <%= option.role ? '' : 'hidden' %>>
+              <div>Role</div>
+              <div>
+                <a href="<%= `/users/?${query}&sortp=role&sortr=ASC` %>"
+                  class="arrow arrow-up <%= (sort.prop === 'role' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>
+                <a href="<%= `/users/?${query}&sortp=role&sortr=DESC` %>"
+                  class="arrow arrow-down <%= (sort.prop === 'role' && sort.rule === 'DESC') ? 'arrow-down-active' : '' %>"></a>
+              </div>
+            </th>
+            <th
+              <%= option.userid || option.email || option.firstname || option.lastname || option.position  || option.fulltime || option.role ? '' : 'hidden' %>>
+              <div>Actions</div>
+            </th>
+            </th>
+          </tr>
+        </thead>
+        <tbody id="tdata">
+          <% let p = isNaN(parseInt(result.page)) || parseInt(result.page) === 0 ? 1 : parseInt(result.page); %>
+          <% let list = result.data %>
+          <% list.forEach((el, index) =>{ 
+                %>
+          <tr>
+            <td <%= option.userid ? '' : 'hidden' %>><%= el.userid %></td>
+            <td <%= option.email ? '' : 'hidden' %>><%= el.email %></td>
+            <td <%= option.firstname ? '' : 'hidden' %>><%= el.firstname || '' %></td>
+            <td <%= option.lastname ? '' : 'hidden' %>><%= el.lastname || '' %></td>
+            <td <%= option.position ? '' : 'hidden' %>>
+              <%= el.position === 'quality assurance' ? 'Quality Assurance' : el.position === 'software developer' ? 'Software Developer' : el.position === 'manager' ? 'Manager' : '' %>
+            </td>
+            <td <%= option.fulltime ? '' : 'hidden' %>> <%= el.fulltime %></td>
+            <td <%= option.role ? '' : 'hidden' %>> <%= el.role %></td>
+            <td
+              <%= option.userid || option.email || option.firstname || option.lastname || option.position  || option.fulltime || option.role ? '' : 'hidden' %>>
+              <div>
+                <a href="/users/edit/<%= el.userid %>" class="btn btn-success">Edit</a>
+                <a href="/users/delete/<%= el.userid %>" class="btn btn-danger">Delete</a>
+              </div>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <nav>
+        <p id="pagenumber"></p>
+        <p id="filters"></p>
+        <p id="sortp"></p>
+        <p id="sortr"></p>
+        <ul id="page" class="pagination mt-2">
+          <% let size = Math.ceil(result.total / 3) %>
+          <% if (p > 1) { %>
+          <li class="page-item"><a class="page-link"
+              href="<%= `/users/?page=${p > 1 ? p-1 : 1}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>">Previous</a>
+          </li>
+          <% }%>
+          <% for (let i = 0; i < size; i++) { %>
+          <li class="page-item <%= p === i+1 ? 'active' : ''%>"><a class="page-link"
+              href="<%= `/users/?page=${i+1}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>"><%=i+1%></a>
+          </li>
+          <%}%>
+          <% if (p < size) { %>
+          <li class="page-item"><a class="page-link"
+              href="<%= `/users/?page=${p < size ? p+1 : size}&${query}${query.length > 0 ? '&' : ''}sortp=${sort.prop}&sortr=${sort.rule}` %>">Next</a>
+          </li>
+          <% }%>
+        </ul>
+      </nav>
+      <a class="btn btn-primary" href="/users/add">Add</a>
+    </div>
+  </div>
+</div>
+<%- include('../partials/footer'); %>
