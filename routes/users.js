@@ -7,6 +7,9 @@ const saltRound = 10;
 
 
 router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
+  if (rq.session.user.role !== 'admin') {
+    return rs.status(401).send('Unauthorized');
+  }
   let url = rq.originalUrl.split('/users').pop().split('?').pop();
   let sort = {
     prop: '',
@@ -113,6 +116,9 @@ router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
 });
 
 router.post('/option', (rq, rs) => {
+  if (rq.session.user.role !== 'admin') {
+    return rs.status(401).send('Unauthorized');
+  }
   let data = rq.body;
   let userid = rq.session.user.userid;
   let option = []
@@ -138,22 +144,32 @@ WHERE userid = $2`,
 
 
 /* GET users listing. */
+
+router.get('/add', helpers.isLoggedIn, (rq, rs) => {
+  if (rq.session.user.role !== 'admin') {
+    return rs.status(401).send('Unauthorized');
+  }
+  rs.render('users/form', { nav: 'users', user: rq.session.user, form: 'add' });
+})
+
 router.get('/edit/:userid', helpers.isLoggedIn, function (req, rs, next) {
-  db.query(`SELECT email, password, position , fulltime FROM users WHERE users.userid = $1`,
-    [req.session.user.userid], (err, res) => {
+  if (req.session.user.role !== 'admin') {
+    return rs.status(401).send('Unauthorized');
+  }
+  db.query(`SELECT userid, email, firstname, lastname, password, position , fulltime, role FROM users WHERE users.userid = $1`,
+    [req.params.userid], (err, res) => {
       if (err) {
         return rs.status(500).send(err);
       }
-      rs.render('profile/form', { nav: 'profile', user: req.session.user, profile: res.rows[0] });
+      rs.render('users/form', { nav: 'users', user: req.session.user, users: res.rows[0], form: 'edit' });
       rs.status(200);
     })
 });
 
-router.get('/add', helpers.isLoggedIn, (rq, rs) => {
-  rs.render('users/form', { nav: 'users', user: rq.session.user, form: 'add' });
-})
-
 router.post('/', (rq, rs) => {
+  if (rq.session.user.role !== 'admin') {
+    return rs.status(401).send('Unauthorized');
+  }
   let data = rq.body;
   db.query(`INSERT INTO users(email, password, firstname, lastname, position, fulltime, role) values 
         ($1, $2, $3, $4, $5, $6, $7) RETURNING *;`,
@@ -174,25 +190,48 @@ router.post('/', (rq, rs) => {
 
 
 router.post('/edit/:userid', function (req, res, next) {
+  if (req.session.user.role !== 'admin') {
+    return rs.status(401).send('Unauthorized');
+  }
   let data = req.body;
   if (data.password.length !== 0) {
-    db.query(`UPDATE users SET password = $1, position = $2, fulltime = $3 WHERE userid = $4`, [
+    db.query(`UPDATE users SET password = $1, position = $2, fulltime = $3, email = $4, firstname = $5, lastname = $6, role = $7 WHERE userid = $8`, [
       bcrypt.hashSync(data.password, saltRound),
       data.position,
       data.fulltime ? true : false,
+      data.email,
+      data.firstname,
+      data.lastname,
+      data.role,
       data.userid
     ], (err) => {
       if (err) {
         return rs.status(500).send(err);
       }
-      res.redirect('/profile')
+      res.redirect('/users')
     })
   } else {
-    res.redirect('/profile')
+    db.query(`UPDATE users SET position = $1, fulltime = $2, email = $3, firstname = $4, lastname = $5, role = $6 WHERE userid = $7`, [
+      data.position,
+      data.fulltime ? true : false,
+      data.email,
+      data.firstname,
+      data.lastname,
+      data.role,
+      data.userid
+    ], (err) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
+      res.redirect('/users')
+    })
   }
 })
 
 router.get('/delete/:userid', (rq, rs) => {
+  if (rq.session.user.role !== 'admin') {
+    return rs.status(401).send('Unauthorized');
+  }
   db.query(`DELETE FROM users WHERE userid = $1`,
     [
       rq.params.userid

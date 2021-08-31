@@ -32,7 +32,16 @@ router.post('/', function (req, res, next) {
       res.redirect('/profile')
     })
   } else {
-    res.redirect('/profile')
+    db.query(`UPDATE users SET position = $1, fulltime = $2 WHERE userid = $3`, [
+      data.position,
+      data.fulltime ? true : false,
+      data.userid
+    ], (err) => {
+      if (err) {
+        return rs.status(500).send(err);
+      }
+      res.redirect('/profile')
+    })
   }
 })
 
