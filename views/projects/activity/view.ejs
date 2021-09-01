@@ -8,7 +8,7 @@
     <div class="card">
       <div class="card-body">
         <div>Activity</div>
-        <% if (activity) { %>
+        <% if (activity.length > 0) { %>
         <div> From <%= activity[0].date %> to <%= activity[activity.length-1].date %></div>
         <% let today = new Date(); %>
         <% let header = false; %>
@@ -46,7 +46,9 @@
         <% } %>
 
         <% } %>
-        <% }%>
+        <% } else {%>
+        <div>Tidak ada activity</div>
+        <% } %>
       </div>
     </div>
   </div>
