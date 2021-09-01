@@ -26,18 +26,21 @@
             <% if ((activity[i].time.getDate() === activity[i+1].time.getDate()) && (activity[i].time.getMonth() === activity[i+1].time.getMonth()) && (activity[i].time.getFullYear() === activity[i+1].time.getFullYear())) { %>
             <% header = true %>
             <li>
-              <%= `${activity[i].hour} ${activity[i].title}: ${activity[i].description}, author: ${activity[i].author}` %>
+              <span><%= `${activity[i].hour} ${activity[i].subject}`%></span><a
+                href="/projects/issues/edit/<%=projectid%>/<%= activity[i].issueid %>">#<%= activity[i].issueid %></a><span><%=`: ${activity[i].description}, author: ${activity[i].author}` %></span>
             </li>
             <%} else { %>
             <% header = false %>
             <li>
-              <%= `${activity[i].hour} ${activity[i].title}: ${activity[i].description}, author: ${activity[i].author}` %>
+              <span><%= `${activity[i].hour} ${activity[i].subject}`%></span><a
+                href="/projects/issues/edit/<%=projectid%>/<%= activity[i].issueid %>">#<%= activity[i].issueid %></a><span><%=`: ${activity[i].description}, author: ${activity[i].author}` %></span>
             </li>
           </ul>
           <%} %>
           <%}  else { %>
           <li>
-            <%= `${activity[i].hour} ${activity[i].title}: ${activity[i].description}, author: ${activity[i].author}` %>
+            <span><%= `${activity[i].hour} ${activity[i].subject}`%></span><a
+              href="/projects/issues/edit/<%=projectid%>/<%= activity[i].issueid %>">#<%= activity[i].issueid %></a><span><%=`: ${activity[i].description}, author: ${activity[i].author}` %></span>
           </li>
         </ul>
         <% } %>

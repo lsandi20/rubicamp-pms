@@ -126,7 +126,7 @@ module.exports = function (dirname) {
 
 
 
-  router.post('/option/:projectid', helpers.isLoggedIn, (rq, rs) => {
+  router.post('/option/:projectid', helpers.isLoggedIn, (rq, rs, next) => {
     let data = rq.body;
     let userid = rq.session.user.userid;
     let option = []
@@ -163,7 +163,7 @@ module.exports = function (dirname) {
       })
   })
 
-  router.get('/:projectid/add', helpers.isLoggedIn, (rq, rs) => {
+  router.get('/:projectid/add', helpers.isLoggedIn, (rq, rs, next) => {
     db.query(`SELECT u.userid, u.firstname FROM members m INNER JOIN users u ON m.userid = u.userid WHERE m.projectid = $1`, [rq.params.projectid], (err, res) => {
       if (err) {
         err.code = 500;
@@ -174,7 +174,7 @@ module.exports = function (dirname) {
   })
 
 
-  router.post('/:projectid', helpers.isLoggedIn, (rq, rs) => {
+  router.post('/:projectid', helpers.isLoggedIn, (rq, rs, next) => {
     let data = rq.body;
     let files = [];
     let promiseArray = [];
@@ -207,10 +207,10 @@ module.exports = function (dirname) {
             err.code = 500;
             return next(err);
           }
-          db.query('INSERT INTO activity(projectid, time, title, description, author) VALUES ($1, $2, $3, $4, $5)', [
+          db.query('INSERT INTO activity(projectid, time, issueid, description, author) VALUES ($1, $2, $3, $4, $5)', [
             rq.params.projectid,
             new Date(),
-            `${data.subject} #${res.rows[0].issueid} (${data.status.split(' ').map(el => el[0].toUpperCase() + el.slice(1)).join(' ')})`,
+            res.rows[0].issueid,
             'Membuat issue',
             rq.session.user.userid
           ], (err, res) => {
@@ -232,7 +232,7 @@ module.exports = function (dirname) {
 
   })
 
-  router.get('/delete/:projectid/:issueid', helpers.isLoggedIn, (rq, rs) => {
+  router.get('/delete/:projectid/:issueid', helpers.isLoggedIn, (rq, rs, next) => {
     db.query(`SELECT files FROM issues WHERE issueid = $1`, [
       rq.params.issueid,
     ], (err, result) => {
@@ -265,7 +265,7 @@ module.exports = function (dirname) {
 
   })
 
-  router.get('/edit/:projectid/:issueid', helpers.isLoggedIn, (rq, rs) => {
+  router.get('/edit/:projectid/:issueid', helpers.isLoggedIn, (rq, rs, next) => {
     db.query(`SELECT u.userid, u.firstname FROM members m INNER JOIN users u ON m.userid = u.userid WHERE m.projectid = $1`, [rq.params.projectid], (err, res) => {
       if (err) {
         err.code = 500;
@@ -289,7 +289,7 @@ module.exports = function (dirname) {
     })
   })
 
-  router.post('/edit/:projectid/:issueid', helpers.isLoggedIn, (rq, rs) => {
+  router.post('/edit/:projectid/:issueid', helpers.isLoggedIn, (rq, rs, next) => {
     db.query(`SELECT status FROM issues WHERE issueid = $1`, [rq.params.issueid], (err, res) => {
       if (err) {
         err.code = 500;
@@ -362,10 +362,10 @@ module.exports = function (dirname) {
                 err.code = 500;
                 return next(err);
               }
-              db.query('INSERT INTO activity(projectid, time, title, description, author) VALUES ($1, $2, $3, $4, $5)', [
+              db.query('INSERT INTO activity(projectid, time, issueid, description, author) VALUES ($1, $2, $3, $4, $5)', [
                 rq.params.projectid,
                 new Date(),
-                `${data.subject} #${rq.params.issueid} (${data.status.split(' ').map(el => el[0].toUpperCase() + el.slice(1)).join(' ')})`,
+                rq.params.issueid,
                 'Mengubah issue',
                 rq.session.user.userid
               ], (err, res) => {

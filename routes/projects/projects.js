@@ -111,7 +111,7 @@ module.exports = function (dirname) {
 
   });
 
-  router.get('/add', helpers.isLoggedIn, (rq, rs) => {
+  router.get('/add', helpers.isLoggedIn, (rq, rs, next) => {
     db.query('SELECT userid, firstname, lastname FROM users', (err, res) => {
       if (err) {
         err.code = 500;
@@ -121,7 +121,7 @@ module.exports = function (dirname) {
     })
   })
 
-  router.post('/', helpers.isLoggedIn, (rq, rs) => {
+  router.post('/', helpers.isLoggedIn, (rq, rs, next) => {
     let data = rq.body;
     let members = [];
     if (Array.isArray(data.userid)) {
@@ -174,7 +174,7 @@ module.exports = function (dirname) {
       });
   })
 
-  router.get('/edit/:projectid', helpers.isLoggedIn, (rq, rs) => {
+  router.get('/edit/:projectid', helpers.isLoggedIn, (rq, rs, next) => {
     db.query(`SELECT projectid, name, members FROM (SELECT p.projectid, p.name, array_agg(u.userid) members FROM projects p LEFT JOIN members m ON p.projectid = m.projectid LEFT JOIN users u ON u.userid = m.userid GROUP BY p.projectid) AS projectmember WHERE projectid = $1`, [rq.params.projectid], (err, res) => {
       if (err) {
         err.code = 500;
@@ -192,7 +192,7 @@ module.exports = function (dirname) {
     })
   })
 
-  router.post('/edit/:projectid', helpers.isLoggedIn, (rq, rs) => {
+  router.post('/edit/:projectid', helpers.isLoggedIn, (rq, rs, next) => {
     let data = rq.body;
     db.query(`UPDATE projects SET name = $1 WHERE projectid = $2 RETURNING *`,
       [
@@ -252,7 +252,7 @@ module.exports = function (dirname) {
       })
   })
 
-  router.get('/delete/:projectid', helpers.isLoggedIn, (rq, rs) => {
+  router.get('/delete/:projectid', helpers.isLoggedIn, (rq, rs, next) => {
     if (rq.session.user.role !== 'admin') {
       return rs.status(401).send('Unauthorized');
     }
@@ -270,7 +270,7 @@ module.exports = function (dirname) {
       })
   })
 
-  router.post('/option', helpers.isLoggedIn, (rq, rs) => {
+  router.post('/option', helpers.isLoggedIn, (rq, rs, next) => {
     let data = rq.body;
     let userid = rq.session.user.userid;
     let option = []
@@ -328,8 +328,9 @@ module.exports = function (dirname) {
           return next(err);
         }
         let project = res.rows[0];
-        db.query(`SELECT a.activityid, a.title, a.description, a.projectid, a.time, u.firstname as author, TO_CHAR (a.time, 'HH24:MI') AS hour, TO_CHAR (a.time, 'DD/MM/YYYY') AS date, TO_CHAR (a.time, 'Day') AS day  FROM activity a INNER JOIN users u ON a.author = u.userid 
-        WHERE projectid = $1 AND a.time >= CURRENT_TIMESTAMP - interval '6 day' GROUP BY a.time, a.activityid, u.userid ORDER BY a.time DESC`,
+        db.query(`SELECT a.activityid, a.issueid, i.subject, i.status, a.description, a.projectid, a.time, u.firstname as author, TO_CHAR (a.time, 'HH24:MI') AS hour, TO_CHAR (a.time, 'DD/MM/YYYY') AS date, TO_CHAR (a.time, 'Day') AS day  FROM activity a INNER JOIN users u ON a.author = u.userid 
+        INNER JOIN issues i ON a.issueid = i.issueid
+        WHERE a.projectid = $1 AND a.time >= CURRENT_TIMESTAMP - interval '6 day' GROUP BY a.time, a.activityid, u.userid, i.issueid ORDER BY a.time DESC`,
           [rq.params.projectid],
           (err, res) => {
             if (err) {
