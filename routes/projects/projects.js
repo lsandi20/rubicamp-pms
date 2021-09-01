@@ -311,8 +311,8 @@ module.exports = function (dirname) {
           return rs.status(500).send(err);
         }
         let project = res.rows[0];
-        db.query(`SELECT a.activityid, a.title, a.description, a.projectid, a.time, u.firstname as author, TO_CHAR (a.time, 'HH24:MI') AS hour, TO_CHAR (a.time, 'DD/MM/YYYY') AS date  FROM activity a INNER JOIN users u ON a.author = u.userid 
-        WHERE projectid = $1 GROUP BY a.time, a.activityid, u.userid`,
+        db.query(`SELECT a.activityid, a.title, a.description, a.projectid, a.time, u.firstname as author, TO_CHAR (a.time, 'HH24:MI') AS hour, TO_CHAR (a.time, 'DD/MM/YYYY') AS date, TO_CHAR (a.time, 'Day') AS day  FROM activity a INNER JOIN users u ON a.author = u.userid 
+        WHERE projectid = $1 AND a.time >= CURRENT_TIMESTAMP - interval '6 day' GROUP BY a.time, a.activityid, u.userid ORDER BY a.time DESC`,
           [rq.params.projectid],
           (err, res) => {
             if (err) {

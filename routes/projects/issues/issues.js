@@ -200,9 +200,20 @@ module.exports = function (dirname) {
           if (err) {
             return rs.status(500).send(err);
           }
-          rq.flash('breadmessage', 'Issue berhasil dibuat')
-          rs.redirect(`/projects/issues/${rq.params.projectid}`)
-          rs.status(201);
+          db.query('INSERT INTO activity(projectid, time, title, description, author) VALUES ($1, $2, $3, $4, $5)', [
+            rq.params.projectid,
+            new Date(),
+            `${data.subject} #${res.rows[0].issueid} (${data.status.split(' ').map(el => el[0].toUpperCase() + el.slice(1)).join(' ')})`,
+            'Membuat issue',
+            rq.session.user.userid
+          ], (err, res) => {
+            if (err) {
+              return rs.status(500).send(err);
+            }
+            rq.flash('breadmessage', 'Issue berhasil dibuat')
+            rs.redirect(`/projects/issues/${rq.params.projectid}`)
+            rs.status(201);
+          })
         })
     }).catch(err => {
       if (err) {
@@ -338,8 +349,8 @@ module.exports = function (dirname) {
               db.query('INSERT INTO activity(projectid, time, title, description, author) VALUES ($1, $2, $3, $4, $5)', [
                 rq.params.projectid,
                 new Date(),
-                data.subject,
-                data.description || '',
+                `${data.subject} #${rq.params.issueid} (${data.status.split(' ').map(el => el[0].toUpperCase() + el.slice(1)).join(' ')})`,
+                'Mengubah issue',
                 rq.session.user.userid
               ], (err, res) => {
                 if (err) {

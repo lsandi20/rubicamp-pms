@@ -1,6 +1,6 @@
 <%- include('../../partials/header'); %>
 <%- include('../../partials/topbar'); %>
-<div class="d-flex ">
+<div class="d-flex vh-100">
   <%- include('../../partials/sidebar'); %>
   <div class="px-3 py-3 vw-100">
     <h2>Activity</h2>
@@ -18,9 +18,10 @@
         <div>Today</div>
         <ul>
           <% } else { %>
-          <div><%= activity[i].date %></div>
+          <div><%= activity[i].day %></div>
           <ul>
             <% } %>
+            <%} %>
             <% if(activity[i+1]) { %>
             <% if ((activity[i].time.getDate() === activity[i+1].time.getDate()) && (activity[i].time.getMonth() === activity[i+1].time.getMonth()) && (activity[i].time.getFullYear() === activity[i+1].time.getFullYear())) { %>
             <% header = true %>
@@ -40,9 +41,9 @@
           </li>
         </ul>
         <% } %>
-        <%} %>
-        <% }%>
+
         <% } %>
+        <% }%>
       </div>
     </div>
   </div>
