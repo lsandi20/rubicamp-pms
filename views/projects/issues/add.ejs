@@ -145,7 +145,11 @@
                   <label class="form-check-label" for="done">%done</label>
                 </div>
                 <div class="container">
-                  <input class="form-control" type="number" name="done" placeholder="%Done">
+                  <select class="form-control" name="done">
+                    <% for (let i = 0; i <= 100; i+= 10) { %>
+                    <option value="<%= i %>" <%= i === 0 ? 'selected' : '' %>><%= i %></option>
+                    <% } %>
+                  </select>
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -200,6 +204,12 @@
     if (fileuploader.children.length > 2) {
       event.target.parentNode.parentNode.remove();
     }
+    if (fileuploader.children.length <= 2) {
+      fileuploader.querySelector('input').required = false
+      if (!(fileuploader.querySelector('input').value)) {
+        fileuploader.querySelector('.rmfile').hidden = true;
+      }
+    }
   }
 
   function addFile(event) {
@@ -212,6 +222,13 @@
       fileInput.firstElementChild.remove();
     }
     event.target.parentNode.insertBefore(fileInput, event.target);
+    let fileuploader = fileInput.closest('.fileuploader');
+    if (fileuploader.children.length > 2) {
+      let inputs = fileuploader.querySelectorAll('input');
+      inputs.forEach(i => {
+        i.required = true;
+      })
+    }
   }
 </script>
 <%- include('../../partials/footer'); %>

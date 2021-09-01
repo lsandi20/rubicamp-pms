@@ -250,8 +250,11 @@
                   <label class="form-check-label" for="done">%done</label>
                 </div>
                 <div class="container">
-                  <input class="form-control" type="number" name="done" placeholder="%Done"
-                    value="<%= result.done || '' %>" <%= result.status === 'closed' ? 'disabled' : '' %>>
+                  <select class="form-control" name="done" <%= result.status === 'closed' ? 'disabled' : '' %>>
+                    <% for (let i = 0; i <= 100; i+= 10) { %>
+                    <option value="<%= i %>" <%= result.done === i ? 'selected' : '' %>><%= i %></option>
+                    <% } %>
+                  </select>
                 </div>
               </div>
               <div class="d-flex flex-row mb-3">
@@ -308,10 +311,16 @@
     filerow.innerHTML += `
                         <div class="d-flex flex-row">
                         <input class="form-control" type="file" name="files" placeholder="file"
-                          onchange="showPreview(event)">
+                          onchange="showPreview(event)" required>
                         <button class="btn btn-outline-danger rmfile ms-3" onclick="removeFile(event)">-</button>
                       </div>`
     fileuploader.insertBefore(filerow, event.target)
+    if (fileuploader.children.length > 2) {
+      let inputs = fileuploader.querySelectorAll('input');
+      inputs.forEach(i => {
+        i.required = true;
+      })
+    }
   }
 
   function showPreview(event) {
@@ -327,6 +336,13 @@
 
   function removeFile(event) {
     event.target.closest('.filerow').remove();
+    let fileuploader = document.querySelector('#fileuploader');
+    if (fileuploader.children.length <= 2) {
+      fileuploader.querySelector('input').required = false
+      if (!(fileuploader.querySelector('input').value)) {
+        fileuploader.querySelector('.rmfile').hidden = true;
+      }
+    }
   }
 </script>
 <%- include('../../partials/footer'); %>

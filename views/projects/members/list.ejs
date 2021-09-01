@@ -18,7 +18,7 @@
             <div class="d-flex flex-row mb-3">
               <div class="container w-50">
                 <input type="checkbox" class="form-check-input" name="checkuserid" <%= check.userid ? 'checked' : '' %>>
-                <label class="form-check-label" for="ID">ID</label>
+                <label class="form-check-label" for="ID">User ID</label>
               </div>
               <div class="container">
                 <input class="form-control" type="number" name="userid" step="1" placeholder="ID"
@@ -105,7 +105,7 @@
         <thead>
           <tr>
             <th <%= option.userid ? '' : 'hidden' %>>
-              <div>#</div>
+              <div>User ID</div>
               <div>
                 <a href="<%= `/projects/members/${projectid}/?${query}&sortp=userid&sortr=ASC` %>"
                   class="arrow arrow-up <%= (sort.prop === 'userid' && sort.rule === 'ASC') ? 'arrow-up-active' : '' %>"></a>

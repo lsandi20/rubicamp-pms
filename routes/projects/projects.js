@@ -287,9 +287,9 @@ module.exports = function (dirname) {
         }
         let project = res.rows[0];
         db.query(`SElECT 
-    COUNT(*) FILTER (WHERE tracker = 'bug' AND status != 'Closed') AS bugopen ,COUNT(*) FILTER (WHERE tracker = 'bug') AS bugtotal,
-    COUNT(*) FILTER (WHERE tracker = 'feature' AND status != 'Closed') AS featureopen ,COUNT(*) FILTER (WHERE tracker = 'feature') AS featuretotal,
-    COUNT(*) FILTER (WHERE tracker = 'support' AND status != 'Closed') AS supportopen ,COUNT(*) FILTER (WHERE tracker = 'support') AS supporttotal
+    COUNT(*) FILTER (WHERE tracker = 'bug' AND status != 'closed') AS bugopen ,COUNT(*) FILTER (WHERE tracker = 'bug') AS bugtotal,
+    COUNT(*) FILTER (WHERE tracker = 'feature' AND status != 'closed') AS featureopen ,COUNT(*) FILTER (WHERE tracker = 'feature') AS featuretotal,
+    COUNT(*) FILTER (WHERE tracker = 'support' AND status != 'closed') AS supportopen ,COUNT(*) FILTER (WHERE tracker = 'support') AS supporttotal
     FROM issues WHERE projectid = $1
     `,
           [rq.params.projectid],
