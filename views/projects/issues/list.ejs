@@ -114,6 +114,7 @@
             </div>
           </div>
           <button class="btn btn-primary" type="submit">Search</button>
+          <button class="btn btn-secondary" onclick="resetFilter()">Reset</button>
         </div>
       </form>
     </div>
@@ -570,8 +571,22 @@
 </div>
 <script>
   setTimeout(() => {
-    document.querySelector('.alert').classList.add('fade')
-    document.querySelector('.alert').hidden = true
+    if (document.querySelector('alert')) {
+      document.querySelector('.alert').classList.add('fade')
+      document.querySelector('.alert').hidden = true
+    }
   }, 1000)
+
+  function resetFilter() {
+    event.preventDefault()
+    let check = document.querySelector('#browse').querySelectorAll('input[type=checkbox]');
+    check.forEach(el => {
+      el.checked = false;
+    })
+    let text = document.querySelector('#browse').querySelectorAll('input[type=text], input[type=number]');
+    text.forEach(el => {
+      el.value = ""
+    })
+  }
 </script>
 <%- include('../../partials/footer'); %>
