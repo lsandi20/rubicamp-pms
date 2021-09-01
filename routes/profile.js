@@ -28,10 +28,10 @@ router.post('/', helpers.isLoggedIn, function (req, rs, next) {
       data.userid
     ], (err) => {
       if (err) {
-        req.flash('breadmessage', 'Profil berhasil diubah')
         err.code = 500;
         return next(err);
       }
+      req.flash('breadmessage', 'Profil berhasil diubah')
       rs.redirect('/profile')
     })
   } else {
