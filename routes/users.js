@@ -89,7 +89,8 @@ router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
   }
   db.query(`SELECT useroption from users WHERE userid = ${rq.session.user.userid}`, (err, res) => {
     if (err) {
-      return rs.status(500).send(err);
+      err.code = 500;
+      return next(err);
     }
     let option = { userid: false, name: false, members: false }
     if (res.rows[0].useroption.length > 0) {
@@ -99,12 +100,14 @@ router.get('/', helpers.isLoggedIn, function (rq, rs, next) {
     }
     db.query(`SELECT userid, email, firstname, lastname, position, fulltime, role FROM users ${filterQuery} ORDER BY ${sort.prop} ${sort.rule} LIMIT 3 OFFSET ${rq.query.page ? (rq.query.page - 1) * 3 : 0}`, filterArr, (err, res) => {
       if (err) {
-        return rs.status(500).send(err);
+        err.code = 500;
+        return next(err);
       }
       let data = res.rows;
       db.query(`SELECT COUNT(userid) AS total FROM (SELECT userid, email, firstname, lastname, position, fulltime, role FROM users ${filterQuery} ORDER BY ${sort.prop} ${sort.rule} ) as users`, filterArr, (err, res) => {
         if (err) {
-          return rs.status(500).send(err);
+          err.code = 500;
+          return next(err);
         }
         let result = {
           data,
@@ -140,7 +143,8 @@ WHERE userid = $2`,
       userid
     ], (err, res) => {
       if (err) {
-        return rs.status(500).send(err);
+        err.code = 500;
+        return next(err);
       }
       rq.flash('breadmessage', 'Opsi berhasil disimpan')
       rs.redirect('/users')
@@ -164,7 +168,8 @@ router.get('/edit/:userid', helpers.isLoggedIn, function (req, rs, next) {
   db.query(`SELECT userid, email, firstname, lastname, password, position , fulltime, role FROM users WHERE users.userid = $1`,
     [req.params.userid], (err, res) => {
       if (err) {
-        return rs.status(500).send(err);
+        err.code = 500;
+        return next(err);
       }
       rs.render('users/form', { nav: 'users', user: req.session.user, users: res.rows[0], form: 'edit' });
       rs.status(200);
@@ -188,7 +193,8 @@ router.post('/', helpers.isLoggedIn, (rq, rs) => {
       data.role
     ], (err, res) => {
       if (err) {
-        return rs.status(500).send(err);
+        err.code = 500;
+        return next(err);
       }
       rq.flash('breadmessage', 'User berhasil ditambahkan')
       rs.redirect('/users')
@@ -197,7 +203,7 @@ router.post('/', helpers.isLoggedIn, (rq, rs) => {
 })
 
 
-router.post('/edit/:userid', helpers.isLoggedIn, function (req, res, next) {
+router.post('/edit/:userid', helpers.isLoggedIn, function (req, rs, next) {
   if (req.session.user.role !== 'admin') {
     return rs.status(401).send('Unauthorized');
   }
@@ -214,10 +220,11 @@ router.post('/edit/:userid', helpers.isLoggedIn, function (req, res, next) {
       data.userid
     ], (err) => {
       if (err) {
-        return rs.status(500).send(err);
+        err.code = 500;
+        return next(err);
       }
       req.flash('breadmessage', 'User berhasil diubah')
-      res.redirect('/users')
+      rs.redirect('/users')
     })
   } else {
     db.query(`UPDATE users SET position = $1, fulltime = $2, email = $3, firstname = $4, lastname = $5, role = $6 WHERE userid = $7`, [
@@ -230,10 +237,11 @@ router.post('/edit/:userid', helpers.isLoggedIn, function (req, res, next) {
       data.userid
     ], (err) => {
       if (err) {
-        return rs.status(500).send(err);
+        err.code = 500;
+        return next(err);
       }
       req.flash('breadmessage', 'User berhasil diubah')
-      res.redirect('/users')
+      rs.redirect('/users')
     })
   }
 })
@@ -247,7 +255,8 @@ router.get('/delete/:userid', helpers.isLoggedIn, (rq, rs) => {
       rq.params.userid
     ], (err, res) => {
       if (err) {
-        return rs.status(500).send(err);
+        err.code = 500;
+        return next(err);
       }
       rs.status(200);
       rq.flash('breadmessage', 'User berhasil dihapus')

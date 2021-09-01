@@ -14,7 +14,8 @@ router.post('/auth', function (req, rs, next) {
   const { email, password } = req.body
   db.query(`SELECT * FROM users WHERE email = $1`, [email], (err, res) => {
     if (err) {
-      return rs.status(500).send(err);
+      err.code = 500;
+      return next(err);
     }
     if (res.rows.length === 0) {
       req.flash('loginmessage', 'User not found')

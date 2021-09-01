@@ -10,14 +10,15 @@ router.get('/', helpers.isLoggedIn, function (req, rs, next) {
   db.query(`SELECT email, password, position , fulltime FROM users WHERE users.userid = $1`,
     [req.session.user.userid], (err, res) => {
       if (err) {
-        return rs.status(500).send(err);
+        err.code = 500;
+        return next(err);
       }
       rs.render('profile/form', { nav: 'profile', user: req.session.user, profile: res.rows[0], breadmessage: req.flash('breadmessage') });
       rs.status(200);
     })
 });
 
-router.post('/', helpers.isLoggedIn, function (req, res, next) {
+router.post('/', helpers.isLoggedIn, function (req, rs, next) {
   let data = req.body;
   if (data.password.length !== 0) {
     db.query(`UPDATE users SET password = $1, position = $2, fulltime = $3 WHERE userid = $4`, [
@@ -28,9 +29,10 @@ router.post('/', helpers.isLoggedIn, function (req, res, next) {
     ], (err) => {
       if (err) {
         req.flash('breadmessage', 'Profil berhasil diubah')
-        return rs.status(500).send(err);
+        err.code = 500;
+        return next(err);
       }
-      res.redirect('/profile')
+      rs.redirect('/profile')
     })
   } else {
     db.query(`UPDATE users SET position = $1, fulltime = $2 WHERE userid = $3`, [
@@ -39,10 +41,11 @@ router.post('/', helpers.isLoggedIn, function (req, res, next) {
       data.userid
     ], (err) => {
       if (err) {
-        return rs.status(500).send(err);
+        err.code = 500;
+        return next(err);
       }
       req.flash('breadmessage', 'Profil berhasil diubah')
-      res.redirect('/profile')
+      rs.redirect('/profile')
     })
   }
 })
