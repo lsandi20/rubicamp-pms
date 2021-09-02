@@ -27,20 +27,23 @@
             <% header = true %>
             <li>
               <span><%= `${activity[i].hour} ${activity[i].subject}`%></span><a
-                href="/projects/issues/edit/<%=projectid%>/<%= activity[i].issueid %>">#<%= activity[i].issueid %></a><span><%=`: ${activity[i].description}, author: ${activity[i].author}` %></span>
+                href="/projects/issues/edit/<%=projectid%>/<%= activity[i].issueid %>">
+                #<%= activity[i].issueid %></a><span><%=` (${activity[i].status.split(' ').map(e=> e = e[0].toUpperCase() + e.slice(1)).join(' ')}): ${activity[i].description}, author: ${activity[i].author}` %></span>
             </li>
             <%} else { %>
             <% header = false %>
             <li>
               <span><%= `${activity[i].hour} ${activity[i].subject}`%></span><a
-                href="/projects/issues/edit/<%=projectid%>/<%= activity[i].issueid %>">#<%= activity[i].issueid %></a><span><%=`: ${activity[i].description}, author: ${activity[i].author}` %></span>
+                href="/projects/issues/edit/<%=projectid%>/<%= activity[i].issueid %>">
+                #<%= activity[i].issueid %></a><span><%=` (${activity[i].status.split(' ').map(e=> e = e[0].toUpperCase() + e.slice(1)).join(' ')}): ${activity[i].description}, author: ${activity[i].author}` %></span>
             </li>
           </ul>
           <%} %>
           <%}  else { %>
           <li>
             <span><%= `${activity[i].hour} ${activity[i].subject}`%></span><a
-              href="/projects/issues/edit/<%=projectid%>/<%= activity[i].issueid %>">#<%= activity[i].issueid %></a><span><%=`: ${activity[i].description}, author: ${activity[i].author}` %></span>
+              href="/projects/issues/edit/<%=projectid%>/<%= activity[i].issueid %>">
+              #<%= activity[i].issueid %></a><span><%=` (${activity[i].status.split(' ').map(e=> e = e[0].toUpperCase() + e.slice(1)).join(' ')}): ${activity[i].description}, author: ${activity[i].author}` %></span>
           </li>
         </ul>
         <% } %>
