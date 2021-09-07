@@ -300,7 +300,7 @@
   function removePreviousFile(event) {
     event.preventDefault();
     let filevalue = event.target.parentNode.parentNode.firstElementChild.value
-    event.target.parentNode.parentNode.innerHTML = `<input type="text" name="deletedFile" value="${filevalue}" hidden>`
+    event.target.parentNode.parentNode.innerHTML = `<input type="text" name="deletedFile" value=${filevalue} hidden>`
   }
 
   function addFile(event) {

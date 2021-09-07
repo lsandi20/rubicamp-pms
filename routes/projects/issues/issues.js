@@ -251,7 +251,7 @@ module.exports = function (dirname) {
           if (result.rows[0].files !== null) {
             result.rows[0].files.forEach((f) => {
               try {
-                fs.unlinkSync(f.path);
+                fs.unlinkSync(`${dirname}/public${f.path}`);
               } catch (error) {
                 console.error('file not found');
               }
@@ -312,15 +312,17 @@ module.exports = function (dirname) {
         if (data.deletedFile) {
           if (Array.isArray(data.deletedFile)) {
             data.deletedFile.forEach((f) => {
+              f = JSON.parse(f)
               try {
-                fs.unlinkSync(f.path);
+                fs.unlinkSync(`${dirname}/public${f.path}`);
               } catch (error) {
                 console.error('file not found');
               }
             })
           } else {
+            data.deletedFile = JSON.parse(data.deletedFile)
             try {
-              fs.unlinkSync(data.deletedFile.path);
+              fs.unlinkSync(`${dirname}/public${data.deletedFile.path}`);
             } catch (error) {
               console.error('file not found');
             }
